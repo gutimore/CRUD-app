@@ -40,5 +40,5 @@ steps:
     azureSubscription: 'gutimore-azure-service-conn'
     appType: 'webAppLinux'
     WebAppName: crud_app
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     RuntimeStack: 'PHP|7.3'
