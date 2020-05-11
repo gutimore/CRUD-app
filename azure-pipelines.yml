@@ -21,17 +21,9 @@ steps:
     sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
     php -version
   displayName: 'Use PHP version $(phpVersion)'
-- task: CmdLine@2
-  inputs:
-    script: |
-      echo '$(Build.BinariesDirectory)'
-      
-      pwd
-      
-      ls -a
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile:
+    rootFolderOrFile: '$(Build.SourcesDirectory)/code'
     includeRootFolder: true
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
