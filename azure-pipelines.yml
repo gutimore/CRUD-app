@@ -27,6 +27,7 @@ steps:
       mkdir bin
       cp $(Build.SourcesDirectory)/code/*.php bin
       cp $(Build.SourcesDirectory)/code/*.css bin
+      ls -a
       ls $(Build.BinariesDirectory)/bin
 - task: ArchiveFiles@2
   inputs:
