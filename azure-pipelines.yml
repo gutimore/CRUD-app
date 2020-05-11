@@ -28,7 +28,7 @@ steps:
       
       pwd
       
-      ll -a
+      ls -a
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile:
