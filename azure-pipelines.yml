@@ -21,6 +21,13 @@ steps:
     sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
     php -version
   displayName: 'Use PHP version $(phpVersion)'
+- task: CmdLine@2
+  inputs:
+    script: |
+      mkdir bin
+      cp $(Build.SourcesDirectory)/code/*.php bin
+      cp $(Build.SourcesDirectory)/code/*.css bin
+      ls bin
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(Build.SourcesDirectory)/code'
