@@ -24,14 +24,9 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
-      mkdir bin
-      cp $(Build.SourcesDirectory)/code/*.php bin
-      cp $(Build.SourcesDirectory)/code/*.css bin
-      echo 'PWD: '
-      pwd
-      echo 'LS -a: '
-      ls -a
-      ls $(Build.BinariesDirectory)/bin
+      mkdir $(Build.BinariesDirectory)/bin
+      cp $(Build.SourcesDirectory)/code/*.php $(Build.BinariesDirectory)/bin
+      cp $(Build.SourcesDirectory)/code/*.css $(Build.BinariesDirectory)/bin
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(Build.BinariesDirectory)/bin'
