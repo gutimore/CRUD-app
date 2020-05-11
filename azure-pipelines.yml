@@ -30,7 +30,7 @@ steps:
       ls bin
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(Build.BinariesDirectory)/bin'
+    rootFolderOrFile: '$(Build.BinariesDirectory)/bin/'
     includeRootFolder: true
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
