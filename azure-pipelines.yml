@@ -65,4 +65,4 @@ stages:
               azureSubscription: 'gutimore-azure-service-conn'
               appType: 'webAppLinux'
               WebAppName: 'gutimore-crud-app'
-              packageForLinux: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+              packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'
