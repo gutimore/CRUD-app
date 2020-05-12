@@ -69,6 +69,16 @@ stages:
         csmParametersFile: 'dev-infrastructure-parameters.json'
         deploymentMode: 'Incremental'
         deploymentOutputs: ResourceGroupDeploymentOutputs
+    - task: AzureMysqlDeployment@1
+      inputs:
+        azureSubscription: 'gutimore-azure-service-conn'
+        ServerName: 'gutimore-crud-app-mysql-server-dev'
+        DatabaseName: 'crud_app'
+        SqlUsername: 'mysqlserveradmin'
+        SqlPassword: 'Charlie802'
+        TaskNameSelector: 'SqlTaskFile'
+        SqlFile: 'sql/users.sql'
+        IpDetectionMethod: 'AutoDetect'
   - deployment: Deploy
     dependsOn: 'DeployInfrastructure'
     pool:
@@ -89,16 +99,6 @@ stages:
               appType: 'webAppLinux'
               WebAppName: '$(WebAppNameDev)'
               packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
-          - task: AzureMysqlDeployment@1
-            inputs:
-              azureSubscription: 'gutimore-azure-service-conn'
-              ServerName: 'gutimore-crud-app-mysql-server-dev'
-              DatabaseName: 'crud_app'
-              SqlUsername: 'mysqlserveradmin'
-              SqlPassword: 'Charlie802'
-              TaskNameSelector: 'SqlTaskFile'
-              SqlFile: 'sql/users.sql'
-              IpDetectionMethod: 'AutoDetect'
           - task: AzureAppServiceSettings@1
             inputs:
               azureSubscription: 'gutimore-azure-service-conn'
