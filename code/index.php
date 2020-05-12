@@ -1,14 +1,5 @@
 <?php
-phpinfo();
-echo '<pre>'; print_r($_SERVER); echo '</pre>';
-echo "hello";
-foreach ($_SERVER as $key => $value) {
-    if (strpos($key, "MYSQLCONNSTR_kingkong") !== 0) {
-        continue;
-    }
-    echo 'found\n';
-    echo $value;
-}
+echo $_ENV['MYSQLCONNSTR_kingkong'];
 require 'db_connection.php';
 // function for getting data from database
 function get_all_data($conn){
