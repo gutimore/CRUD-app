@@ -1,11 +1,7 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$db_name = "crud_app";
-
+parse_str($_ENV['MYSQLCONNSTR_connstring'], $conn_str);
 // Create connection
-$conn = mysqli_connect($servername, $username, $password, $db_name);
+$conn = mysqli_connect($conn_str['servername'], $conn_str['username'], $conn_str['password'], $conn_str['db_name']);
 
 // Check connection
 if (!$conn) {
