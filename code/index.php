@@ -1,4 +1,5 @@
 <?php
+echo "hello";
 foreach ($_SERVER as $key => $value) {
     if (strpos($key, "MYSQLCONNSTR_kingking") !== 0) {
         continue;
