@@ -68,3 +68,26 @@ stages:
               appType: 'webAppLinux'
               WebAppName: '$(WebAppNameDev)'
               packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
+- stage: 'Preprod'
+  displayName: 'Deploy the web application to preprod server'
+  dependsOn: Dev
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-16.04'
+    environment: preprod
+    variables:
+    - group: Release
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'gutimore-azure-service-conn'
+              appType: 'webAppLinux'
+              WebAppName: '$(WebAppNamePreprod)'
+              packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
