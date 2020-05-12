@@ -1,5 +1,10 @@
 <?php
-echo MYSQLCONNSTR_kingkong
+foreach ($_SERVER as $key => $value) {
+    if (strpos($key, "MYSQLCONNSTR_kingking") !== 0) {
+        continue;
+    }
+    echo $value;
+}
 require 'db_connection.php';
 // function for getting data from database
 function get_all_data($conn){
