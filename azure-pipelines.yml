@@ -77,7 +77,7 @@ stages:
                 [
                   {
                     "name": "connstring",
-                    "value": "servername=gutimore-crud-app-mysql-server-dev.mysql.database.azure.com&username=mysqlserveradmin@gutimore-crud-app-mysql-server-dev&password=Charlie802&db_name=crud_app",
+                    "value": $(ConnStringDev),
                     "type": "MySql",
                     "slotSetting": true
                   }
