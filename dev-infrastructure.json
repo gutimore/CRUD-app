@@ -1,321 +1,50 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "sites_dev_gutimore_crud_app_name": {
-            "defaultValue": "dev-gutimore-crud-app",
-            "type": "String"
+        "subscriptionId": {
+            "type": "string"
         },
-        "serverfarms_ASP_gutimorecrudappRG_b121_externalid": {
-            "defaultValue": "/subscriptions/c4477122-f0ae-41cd-be0f-33b12dedcb4d/resourceGroups/gutimore-crud-app-RG/providers/Microsoft.Web/serverfarms/ASP-gutimorecrudappRG-b121",
-            "type": "String"
+        "name": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "hostingEnvironment": {
+            "type": "string"
+        },
+        "hostingPlanName": {
+            "type": "string"
+        },
+        "serverFarmResourceGroup": {
+            "type": "string"
+        },
+        "alwaysOn": {
+            "type": "bool"
+        },
+        "linuxFxVersion": {
+            "type": "string"
         }
     },
-    "variables": {},
     "resources": [
         {
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('name')]",
             "type": "Microsoft.Web/sites",
-            "apiVersion": "2018-11-01",
-            "name": "[parameters('sites_dev_gutimore_crud_app_name')]",
-            "location": "East US",
-            "kind": "app,linux",
+            "location": "[parameters('location')]",
+            "tags": null,
+            "dependsOn": [],
             "properties": {
-                "enabled": true,
-                "hostNameSslStates": [
-                    {
-                        "name": "[concat(parameters('sites_dev_gutimore_crud_app_name'), '.azurewebsites.net')]",
-                        "sslState": "Disabled",
-                        "hostType": "Standard"
-                    },
-                    {
-                        "name": "[concat(parameters('sites_dev_gutimore_crud_app_name'), '.scm.azurewebsites.net')]",
-                        "sslState": "Disabled",
-                        "hostType": "Repository"
-                    }
-                ],
-                "serverFarmId": "[parameters('serverfarms_ASP_gutimorecrudappRG_b121_externalid')]",
-                "reserved": true,
-                "isXenon": false,
-                "hyperV": false,
-                "scmSiteAlsoStopped": false,
-                "clientAffinityEnabled": false,
-                "clientCertEnabled": false,
-                "hostNamesDisabled": false,
-                "containerSize": 0,
-                "dailyMemoryTimeQuota": 0,
-                "httpsOnly": false,
-                "redundancyMode": "None"
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/config",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_dev_gutimore_crud_app_name'), '/web')]",
-            "location": "East US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_dev_gutimore_crud_app_name'))]"
-            ],
-            "properties": {
-                "numberOfWorkers": 1,
-                "defaultDocuments": [
-                    "Default.htm",
-                    "Default.html",
-                    "Default.asp",
-                    "index.htm",
-                    "index.html",
-                    "iisstart.htm",
-                    "default.aspx",
-                    "index.php",
-                    "hostingstart.html"
-                ],
-                "netFrameworkVersion": "v4.0",
-                "linuxFxVersion": "PHP|7.3",
-                "requestTracingEnabled": false,
-                "remoteDebuggingEnabled": false,
-                "remoteDebuggingVersion": "VS2019",
-                "httpLoggingEnabled": false,
-                "logsDirectorySizeLimit": 35,
-                "detailedErrorLoggingEnabled": false,
-                "publishingUsername": "$dev-gutimore-crud-app",
-                "scmType": "VSTSRM",
-                "use32BitWorkerProcess": true,
-                "webSocketsEnabled": false,
-                "alwaysOn": false,
-                "managedPipelineMode": "Integrated",
-                "virtualApplications": [
-                    {
-                        "virtualPath": "/",
-                        "physicalPath": "site\\wwwroot",
-                        "preloadEnabled": false
-                    }
-                ],
-                "loadBalancing": "LeastRequests",
-                "experiments": {
-                    "rampUpRules": []
+                "name": "[parameters('name')]",
+                "siteConfig": {
+                    "appSettings": [],
+                    "linuxFxVersion": "[parameters('linuxFxVersion')]",
+                    "alwaysOn": "[parameters('alwaysOn')]"
                 },
-                "autoHealEnabled": false,
-                "localMySqlEnabled": false,
-                "ipSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 1,
-                        "name": "Allow all",
-                        "description": "Allow all access"
-                    }
-                ],
-                "scmIpSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 1,
-                        "name": "Allow all",
-                        "description": "Allow all access"
-                    }
-                ],
-                "scmIpSecurityRestrictionsUseMain": false,
-                "http20Enabled": false,
-                "minTlsVersion": "1.2",
-                "ftpsState": "AllAllowed",
-                "reservedInstanceCount": 0
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_dev_gutimore_crud_app_name'), '/611589318995992')]",
-            "location": "East US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_dev_gutimore_crud_app_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author": "GitHub",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"Deployment\",\"commitId\":\"70c394d96ec846bfde35286e39faa6493a325ee3\",\"buildId\":\"61\",\"buildNumber\":\"20200512.21\",\"repoProvider\":\"GitHub\",\"repoName\":\"gutimore/CRUD-app\",\"collectionUrl\":\"https://dev.azure.com/gutimore/\",\"teamProject\":\"698957a7-120c-4a40-befa-21887d73b0f5\",\"buildProjectUrl\":\"https://dev.azure.com/gutimore/698957a7-120c-4a40-befa-21887d73b0f5\",\"repositoryUrl\":\"https://github.com/gutimore/CRUD-app\",\"branch\":\"master\",\"teamProjectName\":\"CRUD deployment\",\"slotName\":\"production\"}",
-                "start_time": "2020-05-12T21:29:56.3212187Z",
-                "end_time": "2020-05-12T21:29:56.3212187Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_dev_gutimore_crud_app_name'), '/621589319098239')]",
-            "location": "East US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_dev_gutimore_crud_app_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author": "GitHub",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"Deployment\",\"commitId\":\"5ce5b2418fdc39601136f78a61d15a6576f4afd4\",\"buildId\":\"62\",\"buildNumber\":\"20200512.22\",\"repoProvider\":\"GitHub\",\"repoName\":\"gutimore/CRUD-app\",\"collectionUrl\":\"https://dev.azure.com/gutimore/\",\"teamProject\":\"698957a7-120c-4a40-befa-21887d73b0f5\",\"buildProjectUrl\":\"https://dev.azure.com/gutimore/698957a7-120c-4a40-befa-21887d73b0f5\",\"repositoryUrl\":\"https://github.com/gutimore/CRUD-app\",\"branch\":\"master\",\"teamProjectName\":\"CRUD deployment\",\"slotName\":\"production\"}",
-                "start_time": "2020-05-12T21:31:38.4363213Z",
-                "end_time": "2020-05-12T21:31:38.4363213Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_dev_gutimore_crud_app_name'), '/631589320141829')]",
-            "location": "East US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_dev_gutimore_crud_app_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author": "GitHub",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"Deployment\",\"commitId\":\"f6e7d1da33b637f27d741ee7a1a171b4bd62ffff\",\"buildId\":\"63\",\"buildNumber\":\"20200512.23\",\"repoProvider\":\"GitHub\",\"repoName\":\"gutimore/CRUD-app\",\"collectionUrl\":\"https://dev.azure.com/gutimore/\",\"teamProject\":\"698957a7-120c-4a40-befa-21887d73b0f5\",\"buildProjectUrl\":\"https://dev.azure.com/gutimore/698957a7-120c-4a40-befa-21887d73b0f5\",\"repositoryUrl\":\"https://github.com/gutimore/CRUD-app\",\"branch\":\"master\",\"teamProjectName\":\"CRUD deployment\",\"slotName\":\"production\"}",
-                "start_time": "2020-05-12T21:49:01.9821768Z",
-                "end_time": "2020-05-12T21:49:01.9821768Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_dev_gutimore_crud_app_name'), '/63c9c701d3644797b779a6ac09013768')]",
-            "location": "East US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_dev_gutimore_crud_app_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS_ZIP_DEPLOY",
-                "message": "Created via a push deployment",
-                "start_time": "2020-05-12T21:29:46.9554418Z",
-                "end_time": "2020-05-12T21:29:48.2619757Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_dev_gutimore_crud_app_name'), '/641589320183616')]",
-            "location": "East US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_dev_gutimore_crud_app_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author": "GitHub",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"Deployment\",\"commitId\":\"3b9856972a677eaebc43407e74b7521ba697168e\",\"buildId\":\"64\",\"buildNumber\":\"20200512.24\",\"repoProvider\":\"GitHub\",\"repoName\":\"gutimore/CRUD-app\",\"collectionUrl\":\"https://dev.azure.com/gutimore/\",\"teamProject\":\"698957a7-120c-4a40-befa-21887d73b0f5\",\"buildProjectUrl\":\"https://dev.azure.com/gutimore/698957a7-120c-4a40-befa-21887d73b0f5\",\"repositoryUrl\":\"https://github.com/gutimore/CRUD-app\",\"branch\":\"master\",\"teamProjectName\":\"CRUD deployment\",\"slotName\":\"production\"}",
-                "start_time": "2020-05-12T21:49:43.965743Z",
-                "end_time": "2020-05-12T21:49:43.965743Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_dev_gutimore_crud_app_name'), '/651589321332164')]",
-            "location": "East US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_dev_gutimore_crud_app_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author": "GitHub",
-                "deployer": "VSTS",
-                "message": "{\"type\":\"Deployment\",\"commitId\":\"897132fc58d0ca802c27956d875b69be7cd11878\",\"buildId\":\"65\",\"buildNumber\":\"20200512.25\",\"repoProvider\":\"GitHub\",\"repoName\":\"gutimore/CRUD-app\",\"collectionUrl\":\"https://dev.azure.com/gutimore/\",\"teamProject\":\"698957a7-120c-4a40-befa-21887d73b0f5\",\"buildProjectUrl\":\"https://dev.azure.com/gutimore/698957a7-120c-4a40-befa-21887d73b0f5\",\"repositoryUrl\":\"https://github.com/gutimore/CRUD-app\",\"branch\":\"master\",\"teamProjectName\":\"CRUD deployment\",\"slotName\":\"production\"}",
-                "start_time": "2020-05-12T22:08:52.3516249Z",
-                "end_time": "2020-05-12T22:08:52.3516249Z",
-                "active": true
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_dev_gutimore_crud_app_name'), '/99698feb8b984b579af555a48a85d4f2')]",
-            "location": "East US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_dev_gutimore_crud_app_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS_ZIP_DEPLOY",
-                "message": "Created via a push deployment",
-                "start_time": "2020-05-12T21:48:53.8798194Z",
-                "end_time": "2020-05-12T21:48:55.570597Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_dev_gutimore_crud_app_name'), '/cd7e32d969744bd4a037317dc9f28e01')]",
-            "location": "East US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_dev_gutimore_crud_app_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS_ZIP_DEPLOY",
-                "message": "Created via a push deployment",
-                "start_time": "2020-05-12T21:49:35.3092571Z",
-                "end_time": "2020-05-12T21:49:37.0633372Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_dev_gutimore_crud_app_name'), '/eb9d174f119741f18497c18c1d5a6e41')]",
-            "location": "East US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_dev_gutimore_crud_app_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS_ZIP_DEPLOY",
-                "message": "Created via a push deployment",
-                "start_time": "2020-05-12T21:31:29.8129957Z",
-                "end_time": "2020-05-12T21:31:31.259237Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/deployments",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_dev_gutimore_crud_app_name'), '/f92f2f5466ad44da83f562d6611f9d8f')]",
-            "location": "East US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_dev_gutimore_crud_app_name'))]"
-            ],
-            "properties": {
-                "status": 4,
-                "author_email": "N/A",
-                "author": "N/A",
-                "deployer": "VSTS_ZIP_DEPLOY",
-                "message": "Created via a push deployment",
-                "start_time": "2020-05-12T22:08:42.5613232Z",
-                "end_time": "2020-05-12T22:08:43.7549284Z",
-                "active": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2018-11-01",
-            "name": "[concat(parameters('sites_dev_gutimore_crud_app_name'), '/', parameters('sites_dev_gutimore_crud_app_name'), '.azurewebsites.net')]",
-            "location": "East US",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_dev_gutimore_crud_app_name'))]"
-            ],
-            "properties": {
-                "siteName": "dev-gutimore-crud-app",
-                "hostNameType": "Verified"
+                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "hostingEnvironment": "[parameters('hostingEnvironment')]",
+                "clientAffinityEnabled": false
             }
         }
     ]
