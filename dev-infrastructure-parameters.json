@@ -1,14 +1,30 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "sites_dev_gutimore_crud_app_name": {
-            "defaultValue": "dev-gutimore-crud-app",
-            "type": "String"
+        "subscriptionId": {
+            "value": "c4477122-f0ae-41cd-be0f-33b12dedcb4d"
         },
-        "serverfarms_ASP_gutimorecrudappRG_b121_externalid": {
-            "defaultValue": "/subscriptions/c4477122-f0ae-41cd-be0f-33b12dedcb4d/resourceGroups/gutimore-crud-app-RG/providers/Microsoft.Web/serverfarms/ASP-gutimorecrudappRG-b121",
-            "type": "String"
+        "name": {
+            "value": "dev-gutimore-crud-app"
+        },
+        "location": {
+            "value": "East US"
+        },
+        "hostingEnvironment": {
+            "value": ""
+        },
+        "hostingPlanName": {
+            "value": "ASP-gutimorecrudappRG-b121"
+        },
+        "serverFarmResourceGroup": {
+            "value": "gutimore-crud-app-RG"
+        },
+        "alwaysOn": {
+            "value": false
+        },
+        "linuxFxVersion": {
+            "value": "PHP|7.3"
         }
     }
 }
