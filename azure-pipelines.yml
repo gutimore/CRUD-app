@@ -68,6 +68,20 @@ stages:
               appType: 'webAppLinux'
               WebAppName: '$(WebAppNameDev)'
               packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
+          - task: AzureAppServiceSettings@1
+            inputs:
+              azureSubscription: 'gutimore-azure-service-conn'
+              appName: 'dev-gutimore-crud-app'
+              resourceGroupName: 'gutimore-crud-app-RG'
+              connectionStrings: |
+                [
+                  {
+                    "name": "kingkong",
+                    "value": "firulete",
+                    "type": "MySql",
+                    "slotSetting": true
+                  }
+                ]
 - stage: 'Preprod'
   displayName: 'Deploy the web application to preprod server'
   dependsOn: Dev
