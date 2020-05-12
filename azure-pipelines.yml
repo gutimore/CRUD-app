@@ -64,5 +64,5 @@ stages:
               ConnectionType: 'AzureRM'
               azureSubscription: 'gutimore-azure-service-conn'
               appType: 'webAppLinux'
-              WebAppName: 'dev-gutimore-crud-app'
+              WebAppName: '$(WebAppNameDev)'
               packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
