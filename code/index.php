@@ -4,6 +4,7 @@ foreach ($_SERVER as $key => $value) {
     if (strpos($key, "MYSQLCONNSTR_kingking") !== 0) {
         continue;
     }
+    echo 'found\n';
     echo $value;
 }
 require 'db_connection.php';
