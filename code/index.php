@@ -1,5 +1,4 @@
 <?php
-echo $_ENV['MYSQLCONNSTR_kingkong'];
 require 'db_connection.php';
 // function for getting data from database
 function get_all_data($conn){
