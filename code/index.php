@@ -1,4 +1,5 @@
 <?php
+echo '<pre>'; print_r($_SERVER); echo '</pre>';
 echo "hello";
 foreach ($_SERVER as $key => $value) {
     if (strpos($key, "MYSQLCONNSTR_kingking") !== 0) {
