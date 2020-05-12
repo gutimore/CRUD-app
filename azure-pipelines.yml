@@ -49,6 +49,26 @@ stages:
   displayName: 'Deploy the web application to dev server'
   dependsOn: Build
   jobs:
+  - job: 'DeployInfrastructure'
+    displayName: 'Deploy infrastructure job'
+    pool:
+      vmImage: 'ubuntu-16.04'
+    variables:
+    - group: 'Release'
+    steps:
+    - task: AzureResourceManagerTemplateDeployment@3
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: 'gutimore-azure-service-conn'
+        subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: 'gutimore-crud-app-RG'
+        location: 'East US'
+        templateLocation: 'Linked artifact'
+        csmFile: 'dev-infrastructure.json'
+        csmParametersFile: 'dev-infrastructure-parameters.json'
+        deploymentMode: 'Incremental'
+        deploymentOutputs: ResourceGroupDeploymentOutputs
   - deployment: Deploy
     pool:
       vmImage: 'ubuntu-16.04'
@@ -86,26 +106,6 @@ stages:
   displayName: 'Deploy the web application to preprod server'
   dependsOn: Dev
   jobs:
-  - job: 'DeployInfrastructure'
-    displayName: 'Deploy infrastructure job'
-    pool:
-      vmImage: 'ubuntu-16.04'
-    variables:
-    - group: 'Release'
-    steps:
-    - task: AzureResourceManagerTemplateDeployment@3
-      inputs:
-        deploymentScope: 'Resource Group'
-        azureResourceManagerConnection: 'gutimore-azure-service-conn'
-        subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
-        action: 'Create Or Update Resource Group'
-        resourceGroupName: 'gutimore-crud-app-RG'
-        location: 'East US'
-        templateLocation: 'Linked artifact'
-        csmFile: 'dev-infrastructure.json'
-        csmParametersFile: 'dev-infrastructure-parameters.json'
-        deploymentMode: 'Incremental'
-        deploymentOutputs: ResourceGroupDeploymentOutputs
   - deployment: Deploy
     pool:
       vmImage: 'ubuntu-16.04'
