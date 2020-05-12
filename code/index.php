@@ -2,7 +2,7 @@
 echo '<pre>'; print_r($_SERVER); echo '</pre>';
 echo "hello";
 foreach ($_SERVER as $key => $value) {
-    if (strpos($key, "MYSQLCONNSTR_kingking") !== 0) {
+    if (strpos($key, "MYSQLCONNSTR_kingkong") !== 0) {
         continue;
     }
     echo 'found\n';
