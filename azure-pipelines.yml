@@ -72,7 +72,7 @@ stages:
     - task: AzureMysqlDeployment@1
       inputs:
         azureSubscription: 'gutimore-azure-service-conn'
-        ServerName: 'gutimore-crud-app-mysql-server-dev.mysql.database.azure.com'
+        ServerName: 'gutimore-crud-app-mysql-server-dev2.mysql.database.azure.com'
         DatabaseName: 'crud_app'
         SqlUsername: 'mysqlserveradmin'
         SqlPassword: 'Charlie802'
