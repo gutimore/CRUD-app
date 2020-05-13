@@ -63,6 +63,8 @@
             "name": "[parameters('serverName')]",
             "properties": {
                 "version": "[parameters('version')]",
+                "sslEnforcement": "Disabled",
+                "publicNetworkAccess": "Enabled",
                 "administratorLogin": "[parameters('administratorLogin')]",
                 "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
                 "storageProfile": {
