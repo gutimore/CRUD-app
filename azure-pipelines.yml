@@ -58,7 +58,7 @@ stages:
     steps:
     - task: AzureResourceGroupDeployment@2
       inputs:
-        azureSubscription: 'gutimore-azure-service-conn'
+        azureSubscription: 'AzureRmPipeline-conn'
         resourceGroupName: 'gutimore-crud-app-rg'
         location: 'East US'
         templateLocation: 'Linked artifact'
@@ -67,7 +67,7 @@ stages:
         deploymentMode: 'Incremental'
     - task: AzureMysqlDeployment@1
       inputs:
-        azureSubscription: 'gutimore-azure-service-conn'
+        azureSubscription: 'AzureRmPipeline-conn'
         ServerName: 'gutimore-crud-app-mysql-server-dev.mysql.database.azure.com'
         DatabaseName: 'crud_app'
         SqlUsername: 'mysqlserveradmin@gutimore-crud-app-mysql-server-dev'
@@ -91,13 +91,13 @@ stages:
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
-              azureSubscription: 'gutimore-azure-service-conn'
+              azureSubscription: 'AzureRmPipeline-conn'
               appType: 'webAppLinux'
               WebAppName: '$(WebAppNameDev)'
               packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
           - task: AzureAppServiceSettings@1
             inputs:
-              azureSubscription: 'gutimore-azure-service-conn'
+              azureSubscription: 'AzureRmPipeline-conn'
               appName: 'dev-gutimore-crud-app'
               resourceGroupName: 'gutimore-crud-app-RG'
               connectionStrings: |
@@ -128,7 +128,7 @@ stages:
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
-              azureSubscription: 'gutimore-azure-service-conn'
+              azureSubscription: 'AzureRmPipeline-conn'
               appType: 'webAppLinux'
               WebAppName: '$(WebAppNamePreprod)'
               packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
