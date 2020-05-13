@@ -57,9 +57,9 @@ stages:
       ASPTemplateParametersPATH: 'arm-templates/parameters/dev/app_service_plan.json'
       AppServiceTemplateParametersPATH: 'arm-templates/parameters/dev/app_service.json'
       MysqlServerTemplateParametersPATH: 'arm-templates/parameters/dev/mysql_server.json'
-      WebAppSqlServerName: 'gutimore-crud-app-mysql-server-dev.mysql.database.azure.com'
-      WebAppSqlServerUsername: 'mysqlserveradmin@gutimore-crud-app-mysql-server-dev'
-      WebAppSqlServerPassword: 'Charlie802'
+      WebAppSqlServerName: '$(WebAppServerNameDev)'
+      WebAppSqlServerUsername: '$(WebAppSqlServerUsernameDev)'
+      WebAppSqlServerPassword: '$(WebAppSqlPasswordDev)'
       WebAppServerConnString: $(WebAppServerConnStringDev)
 - stage: 'Preprod'
   displayName: 'Deploy the web application to preprod server'
