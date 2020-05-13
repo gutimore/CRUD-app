@@ -15,7 +15,7 @@
             "value": ""
         },
         "hostingPlanName": {
-            "value": "ASP-gutimorecrudappRG-b121"
+            "value": "gutimore-crud-app-ASP-dev"
         },
         "serverFarmResourceGroup": {
             "value": "gutimore-crud-app-RG"
