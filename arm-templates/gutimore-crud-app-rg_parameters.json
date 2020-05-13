@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sites_gutimore_crud_app_name": {
-            "value": null
+            "value": "gutimore-crud-app"
         },
         "servers_gutimore_crud_app_mysql_server_name": {
-            "value": null
+            "value": "gutimore-crud-app-mysql-server"
         },
         "serverfarms_gutimore_crud_app_app_service_plan_name": {
-            "value": null
+            "value": "gutimore-crud-app-app-service-plan"
         }
     }
 }
