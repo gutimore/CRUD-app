@@ -68,7 +68,7 @@ stages:
         csmFile: 'arm-templates/app_service_plan.json'
         csmParametersFile: 'arm-templates/parameters/dev/app_service_plan.json'
         deploymentMode: 'Incremental'
-        deploymentName: 'app service plan deploy'
+        deploymentName: 'app-service-plan-deploy'
     - task: AzureMysqlDeployment@1
       inputs:
         azureSubscription: 'AzureRmPipeline-conn'
