@@ -106,7 +106,7 @@ jobs:
               [
                 {
                   "name": "connstring",
-                  "value": ${{ parameters.WebAppServerConnString }},
+                  "value": "${{ parameters.WebAppServerConnString }}",
                   "type": "MySql",
                   "slotSetting": true
                 }
