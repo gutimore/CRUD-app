@@ -58,17 +58,14 @@ stages:
     steps:
     - task: AzureResourceManagerTemplateDeployment@3
       inputs:
-        deploymentScope: 'Resource Group'
+        deploymentScope: 'Subscription'
         azureResourceManagerConnection: 'gutimore-azure-service-conn'
         subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
-        action: 'Create Or Update Resource Group'
-        resourceGroupName: 'gutimore-crud-app-RG'
         location: 'East US'
         templateLocation: 'Linked artifact'
-        csmFile: 'arm-templates/gutimore-crud-app-rg.json'
-        csmParametersFile: 'arm-templates/gutimore-crud-app-rg_parameters.json'
+        csmFile: 'arm-templates/app_service_plan.json'
+        csmParametersFile: 'arm-templates/parameters/dev/app_service_plan.json'
         deploymentMode: 'Incremental'
-        deploymentOutputs: ResourceGroupDeploymentOutputs
     - task: AzureMysqlDeployment@1
       inputs:
         azureSubscription: 'gutimore-azure-service-conn'
