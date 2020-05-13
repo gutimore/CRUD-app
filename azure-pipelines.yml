@@ -59,7 +59,7 @@ stages:
     - task: AzureResourceGroupDeployment@2
       inputs:
         azureSubscription: 'gutimore-azure-service-conn'
-        resourceGroupName: 'gutimore-crud-app-RG'
+        resourceGroupName: 'gutimore-crud-app-rg'
         location: 'East US'
         templateLocation: 'Linked artifact'
         csmFile: 'arm-templates/gutimore-crud-app-rg.json'
