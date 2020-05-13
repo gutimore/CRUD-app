@@ -129,7 +129,7 @@ stages:
             inputs:
               azureSubscription: 'AzureRmPipeline-conn'
               appName: 'dev-gutimore-crud-app'
-              resourceGroupName: 'gutimore-crud-app-RG'
+              resourceGroupName: 'gutimore-crud-app-dev-rg'
               connectionStrings: |
                 [
                   {
@@ -202,3 +202,37 @@ stages:
               TaskNameSelector: 'SqlTaskFile'
               SqlFile: 'sql/users.sql'
               IpDetectionMethod: 'AutoDetect'
+  - deployment: Deploy
+    dependsOn: 'DeployInfrastructure'
+    pool:
+      vmImage: 'ubuntu-16.04'
+    environment: preprod
+    variables:
+    - group: Release
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'AzureRmPipeline-conn'
+              appType: 'webAppLinux'
+              WebAppName: '$(WebAppNamePreprod)'
+              packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
+          - task: AzureAppServiceSettings@1
+            inputs:
+              azureSubscription: 'AzureRmPipeline-conn'
+              appName: 'preprod-gutimore-crud-app'
+              resourceGroupName: 'gutimore-crud-app-preprod-rg'
+              connectionStrings: |
+                [
+                  {
+                    "name": "connstring",
+                    "value": $(ConnStringDev),
+                    "type": "MySql",
+                    "slotSetting": true
+                  }
+                ]
