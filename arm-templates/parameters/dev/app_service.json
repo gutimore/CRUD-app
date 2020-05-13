@@ -18,7 +18,7 @@
             "value": "gutimore-crud-app-ASP-dev"
         },
         "serverFarmResourceGroup": {
-            "value": "gutimore-crud-app-RG"
+            "value": "gutimore-crud-app-dev-RG"
         },
         "alwaysOn": {
             "value": false

@@ -65,34 +65,8 @@ stages:
         resourceGroupName: 'gutimore-crud-app-RG'
         location: 'East US'
         templateLocation: 'Linked artifact'
-        csmFile: 'arm-templates/app_service_plan.json'
-        csmParametersFile: 'arm-templates/parameters/dev/app_service_plan.json'
-        deploymentMode: 'Incremental'
-        deploymentOutputs: ResourceGroupDeploymentOutputs
-    - task: AzureResourceManagerTemplateDeployment@3
-      inputs:
-        deploymentScope: 'Resource Group'
-        azureResourceManagerConnection: 'gutimore-azure-service-conn'
-        subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
-        action: 'Create Or Update Resource Group'
-        resourceGroupName: 'gutimore-crud-app-RG'
-        location: 'East US'
-        templateLocation: 'Linked artifact'
-        csmFile: 'arm-templates/app_service.json'
-        csmParametersFile: 'arm-templates/parameters/dev/app_service.json'
-        deploymentMode: 'Incremental'
-        deploymentOutputs: ResourceGroupDeploymentOutputs
-    - task: AzureResourceManagerTemplateDeployment@3
-      inputs:
-        deploymentScope: 'Resource Group'
-        azureResourceManagerConnection: 'gutimore-azure-service-conn'
-        subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
-        action: 'Create Or Update Resource Group'
-        resourceGroupName: 'gutimore-crud-app-RG'
-        location: 'East US'
-        templateLocation: 'Linked artifact'
-        csmFile: 'arm-templates/mysql_server.json'
-        csmParametersFile: 'arm-templates/parameters/dev/mysql_server.json'
+        csmFile: 'arm-templates/gutimore-crud-app-rg.json'
+        csmParametersFile: 'arm-templates/gutimore-crud-app-rg_parameters.json'
         deploymentMode: 'Incremental'
         deploymentOutputs: ResourceGroupDeploymentOutputs
     - task: AzureMysqlDeployment@1
