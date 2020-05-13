@@ -56,15 +56,45 @@ stages:
     variables:
     - group: 'Release'
     steps:
-    - task: AzureResourceGroupDeployment@2
+    - task: AzureResourceManagerTemplateDeployment@3
       inputs:
-        azureSubscription: 'AzureRmPipeline-conn'
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: 'AzureRmPipeline-conn'
+        subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
+        action: 'Create Or Update Resource Group'
         resourceGroupName: 'gutimore-crud-app-rg'
         location: 'East US'
         templateLocation: 'Linked artifact'
-        csmFile: 'arm-templates/gutimore-crud-app-rg.json'
-        csmParametersFile: 'arm-templates/gutimore-crud-app-rg_parameters.json'
+        csmFile: 'arm-templates/app_service_plan.json'
+        csmParametersFile: 'arm-templates/parameters/dev/app_service_plan.json'
         deploymentMode: 'Incremental'
+        deploymentName: 'app-service-plan-deploy'
+    - task: AzureResourceManagerTemplateDeployment@3
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: 'AzureRmPipeline-conn'
+        subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: 'gutimore-crud-app-rg'
+        location: 'East US'
+        templateLocation: 'Linked artifact'
+        csmFile: 'arm-templates/app_service.json'
+        csmParametersFile: 'arm-templates/parameters/dev/app_service.json'
+        deploymentMode: 'Incremental'
+        deploymentName: 'app-service-plan-deploy'
+    - task: AzureResourceManagerTemplateDeployment@3
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: 'AzureRmPipeline-conn'
+        subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: 'gutimore-crud-app-rg'
+        location: 'East US'
+        templateLocation: 'Linked artifact'
+        csmFile: 'arm-templates/mysql_server.json'
+        csmParametersFile: 'arm-templates/parameters/dev/mysql_server.json'
+        deploymentMode: 'Incremental'
+        deploymentName: 'app-service-plan-deploy'
     - task: AzureMysqlDeployment@1
       inputs:
         azureSubscription: 'AzureRmPipeline-conn'
