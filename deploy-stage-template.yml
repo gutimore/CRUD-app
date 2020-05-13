@@ -1,0 +1,111 @@
+parameters:
+- name: WebAppName
+  type: string
+- name: WebAppRG
+  type: string
+- name: ASPTemplateParametersPATH
+  type: string
+- name: AppServiceTemplateParametersPATH
+  type: string
+- name: MysqlServerTemplateParametersPATH
+  type: string
+- name: WebAppSqlServerName
+  type: string
+- name: WebAppSqlServerUsername
+  type: string
+- name: WebAppSqlServerPassword
+  type: string
+- name: WebAppServerConnString
+  type: string
+
+
+- job: 'DeployInfrastructure'
+  displayName: 'Deploy infrastructure job'
+  pool:
+    vmImage: 'ubuntu-16.04'
+  variables:
+  - group: 'Release'
+  steps:
+  - task: AzureResourceManagerTemplateDeployment@3
+    inputs:
+      deploymentScope: 'Resource Group'
+      azureResourceManagerConnection: 'AzureRmPipeline-conn'
+      subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
+      action: 'Create Or Update Resource Group'
+      resourceGroupName: ${{ parameters.WebAppRG }}
+      location: 'East US'
+      templateLocation: 'Linked artifact'
+      csmFile: 'arm-templates/app_service_plan.json'
+      csmParametersFile: ${{ parameters.ASPTemplateParametersPATH }}
+      deploymentMode: 'Incremental'
+      deploymentName: 'app-service-plan-deploy'
+  - task: AzureResourceManagerTemplateDeployment@3
+    inputs:
+      deploymentScope: 'Resource Group'
+      azureResourceManagerConnection: 'AzureRmPipeline-conn'
+      subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
+      action: 'Create Or Update Resource Group'
+      resourceGroupName: ${{ parameters.WebAppRG }}
+      location: 'East US'
+      templateLocation: 'Linked artifact'
+      csmFile: 'arm-templates/app_service.json'
+      csmParametersFile: ${{ parameters.AppServiceTemplateParametersPATH }}
+      deploymentMode: 'Incremental'
+      deploymentName: 'app-service-plan-deploy'
+  - task: AzureResourceManagerTemplateDeployment@3
+    inputs:
+      deploymentScope: 'Resource Group'
+      azureResourceManagerConnection: 'AzureRmPipeline-conn'
+      subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
+      action: 'Create Or Update Resource Group'
+      resourceGroupName: ${{ parameters.WebAppRG }}
+      location: 'East US'
+      templateLocation: 'Linked artifact'
+      csmFile: 'arm-templates/mysql_server.json'
+      csmParametersFile: ${{ parameters.MysqlServerTemplateParametersPATH }}
+      deploymentMode: 'Incremental'
+      deploymentName: 'app-service-plan-deploy'
+  - task: AzureMysqlDeployment@1
+    inputs:
+      azureSubscription: 'AzureRmPipeline-conn'
+      ServerName: ${{ parameters.WebAppSqlServerName }}
+      DatabaseName: 'crud_app'
+      SqlUsername: ${{ parameters.WebAppSqlServerUsername }}
+      SqlPassword: ${{ parameters.WebAppSqlServerPassword }}
+      TaskNameSelector: 'SqlTaskFile'
+      SqlFile: 'sql/users.sql'
+      IpDetectionMethod: 'AutoDetect'
+- deployment: Deploy
+  dependsOn: 'DeployInfrastructure'
+  pool:
+    vmImage: 'ubuntu-16.04'
+  environment: preprod
+  variables:
+  - group: Release
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - download: current
+          artifact: drop
+        - task: AzureRmWebAppDeployment@4
+          inputs:
+            ConnectionType: 'AzureRM'
+            azureSubscription: 'AzureRmPipeline-conn'
+            appType: 'webAppLinux'
+            WebAppName: ${{ parameters.WebAppName }}
+            packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
+        - task: AzureAppServiceSettings@1
+          inputs:
+            azureSubscription: 'AzureRmPipeline-conn'
+            appName: ${{ parameters.WebAppName }}
+            resourceGroupName: ${{ parameters.WebAppRG }}
+            connectionStrings: |
+              [
+                {
+                  "name": "connstring",
+                  "value": ${{ parameters.WebAppServerConnString }},
+                  "type": "MySql",
+                  "slotSetting": true
+                }
+              ]

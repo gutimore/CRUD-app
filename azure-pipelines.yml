@@ -49,96 +49,17 @@ stages:
   displayName: 'Deploy the web application to dev server'
   dependsOn: Build
   jobs:
-  - job: 'DeployInfrastructure'
-    displayName: 'Deploy infrastructure job'
-    pool:
-      vmImage: 'ubuntu-16.04'
-    variables:
-    - group: 'Release'
-    steps:
-    - task: AzureResourceManagerTemplateDeployment@3
-      inputs:
-        deploymentScope: 'Resource Group'
-        azureResourceManagerConnection: 'AzureRmPipeline-conn'
-        subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
-        action: 'Create Or Update Resource Group'
-        resourceGroupName: '$(WebAppRGDev)'
-        location: 'East US'
-        templateLocation: 'Linked artifact'
-        csmFile: 'arm-templates/app_service_plan.json'
-        csmParametersFile: 'arm-templates/parameters/dev/app_service_plan.json'
-        deploymentMode: 'Incremental'
-        deploymentName: 'app-service-plan-deploy'
-    - task: AzureResourceManagerTemplateDeployment@3
-      inputs:
-        deploymentScope: 'Resource Group'
-        azureResourceManagerConnection: 'AzureRmPipeline-conn'
-        subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
-        action: 'Create Or Update Resource Group'
-        resourceGroupName: '$(WebAppRGDev)'
-        location: 'East US'
-        templateLocation: 'Linked artifact'
-        csmFile: 'arm-templates/app_service.json'
-        csmParametersFile: 'arm-templates/parameters/dev/app_service.json'
-        deploymentMode: 'Incremental'
-        deploymentName: 'app-service-plan-deploy'
-    - task: AzureResourceManagerTemplateDeployment@3
-      inputs:
-        deploymentScope: 'Resource Group'
-        azureResourceManagerConnection: 'AzureRmPipeline-conn'
-        subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
-        action: 'Create Or Update Resource Group'
-        resourceGroupName: '$(WebAppRGDev)'
-        location: 'East US'
-        templateLocation: 'Linked artifact'
-        csmFile: 'arm-templates/mysql_server.json'
-        csmParametersFile: 'arm-templates/parameters/dev/mysql_server.json'
-        deploymentMode: 'Incremental'
-        deploymentName: 'app-service-plan-deploy'
-    - task: AzureMysqlDeployment@1
-      inputs:
-        azureSubscription: 'AzureRmPipeline-conn'
-        ServerName: '$(WebAppServerNameDev)'
-        DatabaseName: 'crud_app'
-        SqlUsername: '$(WebAppSqlServerUsernameDev)'
-        SqlPassword: '$(WebAppSqlPasswordDev)'
-        TaskNameSelector: 'SqlTaskFile'
-        SqlFile: 'sql/users.sql'
-        IpDetectionMethod: 'AutoDetect'
-  - deployment: Deploy
-    dependsOn: 'DeployInfrastructure'
-    pool:
-      vmImage: 'ubuntu-16.04'
-    environment: dev
-    variables:
-    - group: Release
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - download: current
-            artifact: drop
-          - task: AzureRmWebAppDeployment@4
-            inputs:
-              ConnectionType: 'AzureRM'
-              azureSubscription: 'AzureRmPipeline-conn'
-              appType: 'webAppLinux'
-              WebAppName: '$(WebAppNameDev)'
-              packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
-          - task: AzureAppServiceSettings@1
-            inputs:
-              azureSubscription: 'AzureRmPipeline-conn'
-              appName: '$(WebAppNameDev)'
-              resourceGroupName: '$(WebAppRGDev)'
-              connectionStrings: |
-                [
-                  {
-                    "name": "connstring",
-                    "value": $(ConnStringDev),
-                    "type": "MySql",
-                    "slotSetting": true
-                  }
-                ]
+  - template: deploy-stage-template.yml
+    parameters:
+      WebAppName: $(WebAppNameDev)
+      WebAppRG: $(WebAppRGDev)
+      ASPTemplateParametersPATH: 'arm-templates/parameters/dev/app_service_plan.json'
+      AppServiceTemplateParametersPATH: 'arm-templates/parameters/dev/app_service.json'
+      MysqlServerTemplateParametersPATH: 'arm-templates/parameters/dev/mysql_server.json'
+      WebAppSqlServerName: $(WebAppSqlServerNameDev)
+      WebAppSqlServerUsername: $(WebAppSqlServerUsernameDev)
+      WebAppSqlServerPassword: $(WebAppSqlServerPasswordDev)
+      WebAppServerConnString: $(WebAppServerConnStringDev)
 - stage: 'Preprod'
   displayName: 'Deploy the web application to preprod server'
   dependsOn: Dev
