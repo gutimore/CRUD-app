@@ -65,8 +65,8 @@ stages:
         resourceGroupName: 'gutimore-crud-app-RG'
         location: 'East US'
         templateLocation: 'Linked artifact'
-        csmFile: 'arm-templates/asp.json'
-        csmParametersFile: 'arm-templates/parameters/dev/asp.json'
+        csmFile: 'arm-templates/app_service_plan.json'
+        csmParametersFile: 'arm-templates/parameters/dev/app_service_plan.json'
         deploymentMode: 'Incremental'
         deploymentOutputs: ResourceGroupDeploymentOutputs
     - task: AzureResourceManagerTemplateDeployment@3
