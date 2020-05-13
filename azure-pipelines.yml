@@ -92,7 +92,7 @@ stages:
         location: 'East US'
         templateLocation: 'Linked artifact'
         csmFile: 'arm-templates/mysql_server.json'
-        csmParametersFile: 'arm-templates/parameters/mysql_server.json'
+        csmParametersFile: 'arm-templates/parameters/dev/mysql_server.json'
         deploymentMode: 'Incremental'
         deploymentOutputs: ResourceGroupDeploymentOutputs
     - task: AzureMysqlDeployment@1
