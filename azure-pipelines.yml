@@ -53,6 +53,7 @@ stages:
     parameters:
       WebAppName: $(WebAppNameDev)
       WebAppRG: $(WebAppRGDev)
+      TargetEnvironment: 'dev'
       ASPTemplateParametersPATH: 'arm-templates/parameters/dev/app_service_plan.json'
       AppServiceTemplateParametersPATH: 'arm-templates/parameters/dev/app_service.json'
       MysqlServerTemplateParametersPATH: 'arm-templates/parameters/dev/mysql_server.json'

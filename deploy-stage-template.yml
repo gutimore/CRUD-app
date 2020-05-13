@@ -3,6 +3,8 @@ parameters:
   type: string
 - name: WebAppRG
   type: string
+- name: TargetEnvironment
+  type: string
 - name: ASPTemplateParametersPATH
   type: string
 - name: AppServiceTemplateParametersPATH
@@ -79,7 +81,7 @@ jobs:
   dependsOn: 'DeployInfrastructure'
   pool:
     vmImage: 'ubuntu-16.04'
-  environment: preprod
+  environment: ${{ parameters.TargetEnvironment }}
   variables:
   - group: Release
   strategy:
