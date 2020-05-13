@@ -85,6 +85,18 @@
             },
             "tags": "[parameters('tags')]",
             "type": "Microsoft.DBforMySQL/servers"
+        },
+        {
+            "apiVersion": "2017-12-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforMySQL/servers', parameters('serverName'))]"
+            ],
+            "name": "[concat(parameters('serverName'), '/AllowAllWindowsAzureIps')]",
+            "properties": {
+                "endIpAddress": "0.0.0.0",
+                "startIpAddress": "0.0.0.0"
+            },
+            "type": "Microsoft.DBforMySQL/servers/firewallRules"
         }
     ],
     "variables": {}
