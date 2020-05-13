@@ -87,7 +87,7 @@ stages:
         azureSubscription: 'gutimore-azure-service-conn'
         ServerName: 'gutimore-crud-app-mysql-server-dev.mysql.database.azure.com'
         DatabaseName: 'crud_app'
-        SqlUsername: 'mysqlserveradmin'
+        SqlUsername: 'mysqlserveradmin@gutimore-crud-app-mysql-server-dev'
         SqlPassword: 'Charlie802'
         TaskNameSelector: 'SqlTaskFile'
         SqlFile: 'sql/users.sql'
