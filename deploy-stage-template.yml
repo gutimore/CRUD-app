@@ -38,7 +38,7 @@ jobs:
       location: 'East US'
       templateLocation: 'Linked artifact'
       csmFile: 'arm-templates/app_service_plan.json'
-      csmParametersFile: ${{ parameters.ASPTemplateParametersPATH }}
+      csmParametersFile: 'arm-templates/parameters/${{ parameters.TargetEnvironment }}/app_service_plan.json'
       deploymentMode: 'Incremental'
       deploymentName: 'app-service-plan-deploy'
   - task: AzureResourceManagerTemplateDeployment@3
