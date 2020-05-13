@@ -56,6 +56,11 @@ stages:
     variables:
     - group: 'Release'
     steps:
+    - task: AzureResourceGroupDeployment@2
+      inputs:
+        azureSubscription: 'gutimore-azure-service-conn'
+        resourceGroupName: 'gutimore-crud-app-RG'
+        location: 'East US'
     - task: AzureResourceManagerTemplateDeployment@3
       inputs:
         deploymentScope: 'Subscription'
