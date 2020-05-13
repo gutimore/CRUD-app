@@ -62,7 +62,7 @@ stages:
         azureResourceManagerConnection: 'AzureRmPipeline-conn'
         subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
         action: 'Create Or Update Resource Group'
-        resourceGroupName: 'gutimore-crud-app-dev-rg'
+        resourceGroupName: '$(WebAppRGDev)'
         location: 'East US'
         templateLocation: 'Linked artifact'
         csmFile: 'arm-templates/app_service_plan.json'
@@ -75,7 +75,7 @@ stages:
         azureResourceManagerConnection: 'AzureRmPipeline-conn'
         subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
         action: 'Create Or Update Resource Group'
-        resourceGroupName: 'gutimore-crud-app-dev-rg'
+        resourceGroupName: '$(WebAppRGDev)'
         location: 'East US'
         templateLocation: 'Linked artifact'
         csmFile: 'arm-templates/app_service.json'
@@ -88,7 +88,7 @@ stages:
         azureResourceManagerConnection: 'AzureRmPipeline-conn'
         subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
         action: 'Create Or Update Resource Group'
-        resourceGroupName: 'gutimore-crud-app-dev-rg'
+        resourceGroupName: '$(WebAppRGDev)'
         location: 'East US'
         templateLocation: 'Linked artifact'
         csmFile: 'arm-templates/mysql_server.json'
@@ -98,10 +98,10 @@ stages:
     - task: AzureMysqlDeployment@1
       inputs:
         azureSubscription: 'AzureRmPipeline-conn'
-        ServerName: 'gutimore-crud-app-mysql-server-dev.mysql.database.azure.com'
+        ServerName: '$(WebAppServerNameDev)'
         DatabaseName: 'crud_app'
-        SqlUsername: 'mysqlserveradmin@gutimore-crud-app-mysql-server-dev'
-        SqlPassword: 'Charlie802'
+        SqlUsername: '$(WebAppSqlServerUsernameDev)'
+        SqlPassword: '$(WebAppSqlPasswordDev)'
         TaskNameSelector: 'SqlTaskFile'
         SqlFile: 'sql/users.sql'
         IpDetectionMethod: 'AutoDetect'
@@ -128,8 +128,8 @@ stages:
           - task: AzureAppServiceSettings@1
             inputs:
               azureSubscription: 'AzureRmPipeline-conn'
-              appName: 'dev-gutimore-crud-app'
-              resourceGroupName: 'gutimore-crud-app-dev-rg'
+              appName: '$(WebAppNameDev)'
+              resourceGroupName: '$(WebAppRGDev)'
               connectionStrings: |
                 [
                   {
@@ -143,65 +143,62 @@ stages:
   displayName: 'Deploy the web application to preprod server'
   dependsOn: Dev
   jobs:
-  - deployment: Deploy
+  - job: 'DeployInfrastructure'
+    displayName: 'Deploy infrastructure job'
     pool:
       vmImage: 'ubuntu-16.04'
-    environment: preprod
     variables:
-    - group: Release
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: AzureResourceManagerTemplateDeployment@3
-            inputs:
-              deploymentScope: 'Resource Group'
-              azureResourceManagerConnection: 'AzureRmPipeline-conn'
-              subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
-              action: 'Create Or Update Resource Group'
-              resourceGroupName: 'gutimore-crud-app-preprod-rg'
-              location: 'East US'
-              templateLocation: 'Linked artifact'
-              csmFile: 'arm-templates/app_service_plan.json'
-              csmParametersFile: 'arm-templates/parameters/preprod/app_service_plan.json'
-              deploymentMode: 'Incremental'
-              deploymentName: 'app-service-plan-deploy'
-          - task: AzureResourceManagerTemplateDeployment@3
-            inputs:
-              deploymentScope: 'Resource Group'
-              azureResourceManagerConnection: 'AzureRmPipeline-conn'
-              subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
-              action: 'Create Or Update Resource Group'
-              resourceGroupName: 'gutimore-crud-app-preprod-rg'
-              location: 'East US'
-              templateLocation: 'Linked artifact'
-              csmFile: 'arm-templates/app_service.json'
-              csmParametersFile: 'arm-templates/parameters/preprod/app_service.json'
-              deploymentMode: 'Incremental'
-              deploymentName: 'app-service-plan-deploy'
-          - task: AzureResourceManagerTemplateDeployment@3
-            inputs:
-              deploymentScope: 'Resource Group'
-              azureResourceManagerConnection: 'AzureRmPipeline-conn'
-              subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
-              action: 'Create Or Update Resource Group'
-              resourceGroupName: 'gutimore-crud-app-preprod-rg'
-              location: 'East US'
-              templateLocation: 'Linked artifact'
-              csmFile: 'arm-templates/mysql_server.json'
-              csmParametersFile: 'arm-templates/parameters/preprod/mysql_server.json'
-              deploymentMode: 'Incremental'
-              deploymentName: 'app-service-plan-deploy'
-          - task: AzureMysqlDeployment@1
-            inputs:
-              azureSubscription: 'AzureRmPipeline-conn'
-              ServerName: 'gutimore-crud-app-mysql-server-dev.mysql.database.azure.com'
-              DatabaseName: 'crud_app'
-              SqlUsername: 'mysqlserveradmin@gutimore-crud-app-mysql-server-dev'
-              SqlPassword: 'Charlie802'
-              TaskNameSelector: 'SqlTaskFile'
-              SqlFile: 'sql/users.sql'
-              IpDetectionMethod: 'AutoDetect'
+    - group: 'Release'
+    steps:
+    - task: AzureResourceManagerTemplateDeployment@3
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: 'AzureRmPipeline-conn'
+        subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: '$(WebAppRGPreprod)'
+        location: 'East US'
+        templateLocation: 'Linked artifact'
+        csmFile: 'arm-templates/app_service_plan.json'
+        csmParametersFile: 'arm-templates/parameters/preprod/app_service_plan.json'
+        deploymentMode: 'Incremental'
+        deploymentName: 'app-service-plan-deploy'
+    - task: AzureResourceManagerTemplateDeployment@3
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: 'AzureRmPipeline-conn'
+        subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: '$(WebAppRGPreprod)'
+        location: 'East US'
+        templateLocation: 'Linked artifact'
+        csmFile: 'arm-templates/app_service.json'
+        csmParametersFile: 'arm-templates/parameters/preprod/app_service.json'
+        deploymentMode: 'Incremental'
+        deploymentName: 'app-service-plan-deploy'
+    - task: AzureResourceManagerTemplateDeployment@3
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: 'AzureRmPipeline-conn'
+        subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: '$(WebAppRGPreprod)'
+        location: 'East US'
+        templateLocation: 'Linked artifact'
+        csmFile: 'arm-templates/mysql_server.json'
+        csmParametersFile: 'arm-templates/parameters/preprod/mysql_server.json'
+        deploymentMode: 'Incremental'
+        deploymentName: 'app-service-plan-deploy'
+    - task: AzureMysqlDeployment@1
+      inputs:
+        azureSubscription: 'AzureRmPipeline-conn'
+        ServerName: '$(WebAppServerNamePreprod)'
+        DatabaseName: 'crud_app'
+        SqlUsername: '$(WebAppSqlServerUsernamePreprod)'
+        SqlPassword: '$(WebAppSqlPasswordPreprod)'
+        TaskNameSelector: 'SqlTaskFile'
+        SqlFile: 'sql/users.sql'
+        IpDetectionMethod: 'AutoDetect'
   - deployment: Deploy
     dependsOn: 'DeployInfrastructure'
     pool:
@@ -225,13 +222,13 @@ stages:
           - task: AzureAppServiceSettings@1
             inputs:
               azureSubscription: 'AzureRmPipeline-conn'
-              appName: 'preprod-gutimore-crud-app'
-              resourceGroupName: 'gutimore-crud-app-preprod-rg'
+              appName: '$(WebAppNamePreprod)'
+              resourceGroupName: '$(WebAppRGPreprod)'
               connectionStrings: |
                 [
                   {
                     "name": "connstring",
-                    "value": $(ConnStringDev),
+                    "value": $(ConnStringPreprod),
                     "type": "MySql",
                     "slotSetting": true
                   }
