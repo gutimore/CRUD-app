@@ -6,7 +6,7 @@
             "value": "c4477122-f0ae-41cd-be0f-33b12dedcb4d"
         },
         "name": {
-            "value": "dev-gutimore-crud-app"
+            "value": "preprod-gutimore-crud-app"
         },
         "location": {
             "value": "East US"
@@ -15,10 +15,10 @@
             "value": ""
         },
         "hostingPlanName": {
-            "value": "gutimore-crud-app-ASP-dev"
+            "value": "gutimore-crud-app-ASP-preprod"
         },
         "serverFarmResourceGroup": {
-            "value": "gutimore-crud-app-RG"
+            "value": "gutimore-crud-app-preprod-rg"
         },
         "alwaysOn": {
             "value": false

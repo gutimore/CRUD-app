@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "serverName": {
-            "value": "gutimore-crud-app-mysql-server-dev"
+            "value": "gutimore-crud-app-mysql-server-preprod"
         },
         "location": {
             "value": "eastus"
