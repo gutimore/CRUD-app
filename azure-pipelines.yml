@@ -65,8 +65,8 @@ stages:
         resourceGroupName: 'gutimore-crud-app-RG'
         location: 'East US'
         templateLocation: 'Linked artifact'
-        csmFile: 'dev-infrastructure.json'
-        csmParametersFile: 'dev-infrastructure-parameters.json'
+        csmFile: 'arm-templates/app_service_template.json'
+        csmParametersFile: 'arm-templates/app_service_template_parameters.json'
         deploymentMode: 'Incremental'
         deploymentOutputs: ResourceGroupDeploymentOutputs
     - task: AzureResourceManagerTemplateDeployment@3
@@ -78,8 +78,8 @@ stages:
         resourceGroupName: 'gutimore-crud-app-RG'
         location: 'East US'
         templateLocation: 'Linked artifact'
-        csmFile: 'mysql_db_template.json'
-        csmParametersFile: 'mysql_db_template_parameters.json'
+        csmFile: 'arm-templates/mysql_db_template.json'
+        csmParametersFile: 'arm-templates/mysql_db_template_parameters.json'
         deploymentMode: 'Incremental'
         deploymentOutputs: ResourceGroupDeploymentOutputs
     - task: AzureMysqlDeployment@1
