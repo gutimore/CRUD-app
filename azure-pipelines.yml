@@ -62,7 +62,7 @@ stages:
         azureResourceManagerConnection: 'AzureRmPipeline-conn'
         subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
         action: 'Create Or Update Resource Group'
-        resourceGroupName: 'gutimore-crud-app-rg'
+        resourceGroupName: 'gutimore-crud-app-dev-rg'
         location: 'East US'
         templateLocation: 'Linked artifact'
         csmFile: 'arm-templates/app_service_plan.json'
@@ -75,7 +75,7 @@ stages:
         azureResourceManagerConnection: 'AzureRmPipeline-conn'
         subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
         action: 'Create Or Update Resource Group'
-        resourceGroupName: 'gutimore-crud-app-rg'
+        resourceGroupName: 'gutimore-crud-app-dev-rg'
         location: 'East US'
         templateLocation: 'Linked artifact'
         csmFile: 'arm-templates/app_service.json'
@@ -88,7 +88,7 @@ stages:
         azureResourceManagerConnection: 'AzureRmPipeline-conn'
         subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
         action: 'Create Or Update Resource Group'
-        resourceGroupName: 'gutimore-crud-app-rg'
+        resourceGroupName: 'gutimore-crud-app-dev-rg'
         location: 'East US'
         templateLocation: 'Linked artifact'
         csmFile: 'arm-templates/mysql_server.json'
@@ -153,12 +153,52 @@ stages:
       runOnce:
         deploy:
           steps:
-          - download: current
-            artifact: drop
-          - task: AzureRmWebAppDeployment@4
+          - task: AzureResourceManagerTemplateDeployment@3
             inputs:
-              ConnectionType: 'AzureRM'
+              deploymentScope: 'Resource Group'
+              azureResourceManagerConnection: 'AzureRmPipeline-conn'
+              subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: 'gutimore-crud-app-preprod-rg'
+              location: 'East US'
+              templateLocation: 'Linked artifact'
+              csmFile: 'arm-templates/app_service_plan.json'
+              csmParametersFile: 'arm-templates/parameters/preprod/app_service_plan.json'
+              deploymentMode: 'Incremental'
+              deploymentName: 'app-service-plan-deploy'
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              azureResourceManagerConnection: 'AzureRmPipeline-conn'
+              subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: 'gutimore-crud-app-preprod-rg'
+              location: 'East US'
+              templateLocation: 'Linked artifact'
+              csmFile: 'arm-templates/app_service.json'
+              csmParametersFile: 'arm-templates/parameters/preprod/app_service.json'
+              deploymentMode: 'Incremental'
+              deploymentName: 'app-service-plan-deploy'
+          - task: AzureResourceManagerTemplateDeployment@3
+            inputs:
+              deploymentScope: 'Resource Group'
+              azureResourceManagerConnection: 'AzureRmPipeline-conn'
+              subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: 'gutimore-crud-app-preprod-rg'
+              location: 'East US'
+              templateLocation: 'Linked artifact'
+              csmFile: 'arm-templates/mysql_server.json'
+              csmParametersFile: 'arm-templates/parameters/preprod/mysql_server.json'
+              deploymentMode: 'Incremental'
+              deploymentName: 'app-service-plan-deploy'
+          - task: AzureMysqlDeployment@1
+            inputs:
               azureSubscription: 'AzureRmPipeline-conn'
-              appType: 'webAppLinux'
-              WebAppName: '$(WebAppNamePreprod)'
-              packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
+              ServerName: 'gutimore-crud-app-mysql-server-dev.mysql.database.azure.com'
+              DatabaseName: 'crud_app'
+              SqlUsername: 'mysqlserveradmin@gutimore-crud-app-mysql-server-dev'
+              SqlPassword: 'Charlie802'
+              TaskNameSelector: 'SqlTaskFile'
+              SqlFile: 'sql/users.sql'
+              IpDetectionMethod: 'AutoDetect'
