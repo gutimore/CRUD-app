@@ -88,7 +88,7 @@ jobs:
               [
                 {
                   "name": "connstring",
-                  "value": $(WebAppServerConnString_${{ parameters.TargetEnvironment }}),
+                  "value":" $(WebAppServerConnString_${{ parameters.TargetEnvironment }})",
                   "type": "MySql",
                   "slotSetting": true
                 }
