@@ -1,23 +1,5 @@
 parameters:
-- name: WebAppName
-  type: string
-- name: WebAppRG
-  type: string
 - name: TargetEnvironment
-  type: string
-- name: ASPTemplateParametersPATH
-  type: string
-- name: AppServiceTemplateParametersPATH
-  type: string
-- name: MysqlServerTemplateParametersPATH
-  type: string
-- name: WebAppSqlServerName
-  type: string
-- name: WebAppSqlServerUsername
-  type: string
-- name: WebAppSqlServerPassword
-  type: string
-- name: WebAppServerConnString
   type: string
 
 jobs:
@@ -34,7 +16,7 @@ jobs:
       azureResourceManagerConnection: 'AzureRmPipeline-conn'
       subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
       action: 'Create Or Update Resource Group'
-      resourceGroupName: $(WebAppRG_${{ parameters.TargetEnvironment }})
+      resourceGroupName: 'gutimore-crud-app-${{ parameters.TargetEnvironment }}-rg'
       location: 'East US'
       templateLocation: 'Linked artifact'
       csmFile: 'arm-templates/app_service_plan.json'
@@ -47,7 +29,7 @@ jobs:
       azureResourceManagerConnection: 'AzureRmPipeline-conn'
       subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
       action: 'Create Or Update Resource Group'
-      resourceGroupName: $(WebAppRG_${{ parameters.TargetEnvironment }})
+      resourceGroupName: 'gutimore-crud-app-${{ parameters.TargetEnvironment }}-rg'
       location: 'East US'
       templateLocation: 'Linked artifact'
       csmFile: 'arm-templates/app_service.json'
@@ -60,7 +42,7 @@ jobs:
       azureResourceManagerConnection: 'AzureRmPipeline-conn'
       subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
       action: 'Create Or Update Resource Group'
-      resourceGroupName: $(WebAppRG_${{ parameters.TargetEnvironment }})
+      resourceGroupName: 'gutimore-crud-app-${{ parameters.TargetEnvironment }}-rg'
       location: 'East US'
       templateLocation: 'Linked artifact'
       csmFile: 'arm-templates/mysql_server.json'
@@ -70,10 +52,10 @@ jobs:
   - task: AzureMysqlDeployment@1
     inputs:
       azureSubscription: 'AzureRmPipeline-conn'
-      ServerName: ${{ parameters.WebAppSqlServerName }}
+      ServerName: 'gutimore-crud-app-mysql-server-${{ parameters.TargetEnvironment }}.mysql.database.azure.com'
       DatabaseName: 'crud_app'
-      SqlUsername: ${{ parameters.WebAppSqlServerUsername }}
-      SqlPassword: ${{ parameters.WebAppSqlServerPassword }}
+      SqlUsername: $(WebAppSqlServerUsername_${{ parameters.TargetEnvironment }})
+      SqlPassword: $(WebAppSqlServerPassword_${{ parameters.TargetEnvironment }})
       TaskNameSelector: 'SqlTaskFile'
       SqlFile: 'sql/users.sql'
       IpDetectionMethod: 'AutoDetect'
@@ -95,18 +77,18 @@ jobs:
             ConnectionType: 'AzureRM'
             azureSubscription: 'AzureRmPipeline-conn'
             appType: 'webAppLinux'
-            WebAppName: ${{ parameters.WebAppName }}
+            WebAppName: '${{ parameters.TargetEnvironment }}-gutimore-crud-app'
             packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
         - task: AzureAppServiceSettings@1
           inputs:
             azureSubscription: 'AzureRmPipeline-conn'
-            appName: ${{ parameters.WebAppName }}
-            resourceGroupName: $(WebAppRG_${{ parameters.TargetEnvironment }})
+            appName: '${{ parameters.TargetEnvironment }}-gutimore-crud-app'
+            resourceGroupName: 'gutimore-crud-app-${{ parameters.TargetEnvironment }}-rg'
             connectionStrings: |
               [
                 {
                   "name": "connstring",
-                  "value": "${{ parameters.WebAppServerConnString }}",
+                  "value": $(WebAppServerConnString_${{ parameters.TargetEnvironment }}),
                   "type": "MySql",
                   "slotSetting": true
                 }
