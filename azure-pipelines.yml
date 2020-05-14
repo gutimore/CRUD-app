@@ -51,29 +51,11 @@ stages:
   jobs:
   - template: deploy-stage-template.yml
     parameters:
-      WebAppName: $(WebAppNameDev)
-      WebAppRG: $(WebAppRGDev)
       TargetEnvironment: 'dev'
-      ASPTemplateParametersPATH: 'arm-templates/parameters/dev/app_service_plan.json'
-      AppServiceTemplateParametersPATH: 'arm-templates/parameters/dev/app_service.json'
-      MysqlServerTemplateParametersPATH: 'arm-templates/parameters/dev/mysql_server.json'
-      WebAppSqlServerName: '$(WebAppServerNameDev)'
-      WebAppSqlServerUsername: '$(WebAppSqlServerUsernameDev)'
-      WebAppSqlServerPassword: '$(WebAppSqlPasswordDev)'
-      WebAppServerConnString: $(WebAppServerConnStringDev)
 - stage: 'Preprod'
   displayName: 'Deploy the web application to preprod server'
   dependsOn: Dev
   jobs:
   - template: deploy-stage-template.yml
     parameters:
-      WebAppName: $(WebAppNamePreprod)
-      WebAppRG: $(WebAppRGPreprod)
       TargetEnvironment: 'preprod'
-      ASPTemplateParametersPATH: 'arm-templates/parameters/preprod/app_service_plan.json'
-      AppServiceTemplateParametersPATH: 'arm-templates/parameters/preprod/app_service.json'
-      MysqlServerTemplateParametersPATH: 'arm-templates/parameters/preprod/mysql_server.json'
-      WebAppSqlServerName: '$(WebAppServerNamePreprod)'
-      WebAppSqlServerUsername: '$(WebAppSqlServerUsernamePreprod)'
-      WebAppSqlServerPassword: '$(WebAppSqlPasswordPreprod)'
-      WebAppServerConnString: $(WebAppServerConnStringPreprod)
