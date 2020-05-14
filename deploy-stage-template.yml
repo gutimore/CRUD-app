@@ -54,8 +54,8 @@ jobs:
       azureSubscription: 'AzureRmPipeline-conn'
       ServerName: 'gutimore-crud-app-mysql-server-${{ parameters.TargetEnvironment }}.mysql.database.azure.com'
       DatabaseName: 'crud_app'
-      SqlUsername: $(WebAppSqlServerUsername_${{ parameters.TargetEnvironment }})
-      SqlPassword: $(WebAppSqlServerPassword_${{ parameters.TargetEnvironment }})
+      SqlUsername: '$(WebAppSqlServerUsername_${{ parameters.TargetEnvironment }})'
+      SqlPassword: '$(WebAppSqlServerPassword_${{ parameters.TargetEnvironment }})'
       TaskNameSelector: 'SqlTaskFile'
       SqlFile: 'sql/users.sql'
       IpDetectionMethod: 'AutoDetect'
