@@ -7,6 +7,20 @@ trigger:
 - master
 
 stages:
+- stage: 'Ansible'
+  displayName: 'Deploy Ansible VM'
+  jobs:
+  - job: 'Start'
+    displayName: 'start 1'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - script: |
+        sudo apt update && sudo apt dist-upgrade -y
+        sudo apt install -y libssl-dev libffi-dev python-dev python-pip
+        sudo pip install ansible[azure]
+      displayName: 'Install ansible an dependencies'
+
 - stage: 'Build'
   displayName: 'Build the web application'
   jobs: 
