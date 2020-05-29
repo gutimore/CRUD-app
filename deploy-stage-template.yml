@@ -31,15 +31,10 @@ jobs:
       displayName: 'Azure App Service Deploy'
       inputs:
         ConnectionType: 'AzureRM'
-        azureSubscription: 'gutimoreRMConn'
+        azureSubscription: 'AzureRmPipeline-conn'
         WebAppName: '$(webappName)'
         Package: '$(Pipeline.Workspace)/drop/**/*.zip'
-        AppSettings: '-SPRING_DATASOURCE_USERNAME
-
-        $(mysqlAdmin)@$(mysqlServerName) -SPRING_DATASOURCE_PASSWORD
-        $(mysqlAdminSecret) -SPRING_DATASOURCE_URL
-        jdbc:mysql://$(mysqlServerName).mysql.database.azure.com:3306/hotel_coupon?
-        useSSL=true&requireSSL=false'
+        AppSettings: '$(WebAppServerConnString_dev)'
         TakeAppOfflineFlag: true
         UseWebDeploy: true
         RemoveAdditionalFilesFlag: true
