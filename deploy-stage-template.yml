@@ -6,8 +6,6 @@ jobs:
     variables:
       webappName: 'gutimore-ansible-webapp'
       mysqlServerName: 'gutimore-ansible-mysql-server'
-    variables:
-    - group: 'Release'
     steps:
     - task: qetza.replacetokens.replacetokens-task.replacetokens@3
       displayName: 'Replace variables in Ansible script to deploy Azure resources'
