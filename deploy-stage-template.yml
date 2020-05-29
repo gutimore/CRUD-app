@@ -1,95 +1,45 @@
-parameters:
-- name: TargetEnvironment
-  type: string
-
 jobs:
-- job: 'DeployInfrastructure'
-  displayName: 'Deploy infrastructure job'
-  pool:
-    vmImage: 'ubuntu-16.04'
-  variables:
-  - group: 'Release'
-  steps:
-  - task: AzureResourceManagerTemplateDeployment@3
-    inputs:
-      deploymentScope: 'Resource Group'
-      azureResourceManagerConnection: 'AzureRmPipeline-conn'
-      subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
-      action: 'Create Or Update Resource Group'
-      resourceGroupName: 'gutimore-crud-app-${{ parameters.TargetEnvironment }}-rg'
-      location: 'East US'
-      templateLocation: 'Linked artifact'
-      csmFile: 'arm-templates/app_service_plan.json'
-      csmParametersFile: 'arm-templates/parameters/${{ parameters.TargetEnvironment }}/app_service_plan.json'
-      deploymentMode: 'Incremental'
-      deploymentName: 'app-service-plan-deploy'
-  - task: AzureResourceManagerTemplateDeployment@3
-    inputs:
-      deploymentScope: 'Resource Group'
-      azureResourceManagerConnection: 'AzureRmPipeline-conn'
-      subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
-      action: 'Create Or Update Resource Group'
-      resourceGroupName: 'gutimore-crud-app-${{ parameters.TargetEnvironment }}-rg'
-      location: 'East US'
-      templateLocation: 'Linked artifact'
-      csmFile: 'arm-templates/app_service.json'
-      csmParametersFile: 'arm-templates/parameters/${{ parameters.TargetEnvironment }}/app_service.json'
-      deploymentMode: 'Incremental'
-      deploymentName: 'app-service-plan-deploy'
-  - task: AzureResourceManagerTemplateDeployment@3
-    inputs:
-      deploymentScope: 'Resource Group'
-      azureResourceManagerConnection: 'AzureRmPipeline-conn'
-      subscriptionId: 'c4477122-f0ae-41cd-be0f-33b12dedcb4d'
-      action: 'Create Or Update Resource Group'
-      resourceGroupName: 'gutimore-crud-app-${{ parameters.TargetEnvironment }}-rg'
-      location: 'East US'
-      templateLocation: 'Linked artifact'
-      csmFile: 'arm-templates/mysql_server.json'
-      csmParametersFile: 'arm-templates/parameters/${{ parameters.TargetEnvironment }}/mysql_server.json'
-      deploymentMode: 'Incremental'
-      deploymentName: 'app-service-plan-deploy'
-  - task: AzureMysqlDeployment@1
-    inputs:
-      azureSubscription: 'AzureRmPipeline-conn'
-      ServerName: 'gutimore-crud-app-mysql-server-${{ parameters.TargetEnvironment }}.mysql.database.azure.com'
-      DatabaseName: 'crud_app'
-      SqlUsername: '$(WebAppSqlServerUsername_${{ parameters.TargetEnvironment }})'
-      SqlPassword: '$(WebAppSqlServerPassword_${{ parameters.TargetEnvironment }})'
-      TaskNameSelector: 'SqlTaskFile'
-      SqlFile: 'sql/users.sql'
-      IpDetectionMethod: 'AutoDetect'
-- deployment: Deploy
-  dependsOn: 'DeployInfrastructure'
-  pool:
-    vmImage: 'ubuntu-16.04'
-  environment: ${{ parameters.TargetEnvironment }}
-  variables:
-  - group: Release
-  strategy:
-    runOnce:
-      deploy:
-        steps:
-        - download: current
-          artifact: drop
-        - task: AzureRmWebAppDeployment@4
-          inputs:
-            ConnectionType: 'AzureRM'
-            azureSubscription: 'AzureRmPipeline-conn'
-            appType: 'webAppLinux'
-            WebAppName: '${{ parameters.TargetEnvironment }}-gutimore-crud-app'
-            packageForLinux: '$(Pipeline.Workspace)/drop/*.zip'
-        - task: AzureAppServiceSettings@1
-          inputs:
-            azureSubscription: 'AzureRmPipeline-conn'
-            appName: '${{ parameters.TargetEnvironment }}-gutimore-crud-app'
-            resourceGroupName: 'gutimore-crud-app-${{ parameters.TargetEnvironment }}-rg'
-            connectionStrings: |
-              [
-                {
-                  "name": "connstring",
-                  "value":" $(WebAppServerConnString_${{ parameters.TargetEnvironment }})",
-                  "type": "MySql",
-                  "slotSetting": true
-                }
-              ]
+  - job: 'Deploy'
+    displayName: 'Deploy job'
+    pool:
+      vmImage: 'vs2017-win2016'
+    variables:
+      webappName: 'gutimore-ansible-webapp'
+      mysqlServerName: 'gutimore-ansible-mysql-server'
+    steps:
+    - task: qetza.replacetokens.replacetokens-task.replacetokens@3
+      displayName: 'Replace variables in Ansible script to deploy Azure resources'
+      inputs:
+        targetFiles: '**/*.yml'
+        escapeType: none
+        tokenPrefix: '__'
+        tokenSuffix: '__'
+    - task: Ansible@0
+      inputs:
+        ansibleInterface: 'remoteMachine'
+        connectionOverSsh: 'AnsibleVMSSHConn'
+        playbookSourceRemoteMachine: 'agentMachine'
+        playbookRootRemoteMachine: '$(System.DefaultWorkingDirectory)/ansible'
+        playbookPathLinkedArtifactOnRemoteMachine: 'playbook.yml'
+        inventoriesRemoteMachine: 'hostList'
+        inventoryHostListRemoteMachine: 'gutimore-ansible-controller.eastus.cloudapp.azure.com'
+        failOnStdErr: false
+    - download: current
+      artifact: drop
+
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Azure App Service Deploy'
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'gutimoreRMConn'
+        WebAppName: '$(webappName)'
+        Package: '$(Pipeline.Workspace)/drop/**/*.zip'
+        AppSettings: '-SPRING_DATASOURCE_USERNAME
+
+        $(mysqlAdmin)@$(mysqlServerName) -SPRING_DATASOURCE_PASSWORD
+        $(mysqlAdminSecret) -SPRING_DATASOURCE_URL
+        jdbc:mysql://$(mysqlServerName).mysql.database.azure.com:3306/hotel_coupon?
+        useSSL=true&requireSSL=false'
+        TakeAppOfflineFlag: true
+        UseWebDeploy: true
+        RemoveAdditionalFilesFlag: true
