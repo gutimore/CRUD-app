@@ -17,17 +17,16 @@ stages:
           phpVersion: 7.2
         steps:
         - task: CopyFiles@2
-          displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+          displayName: 'Copy Files to: $(Build.artifactstagingdirectory)'
           inputs:
-            SourceFolder: '$(build.sourcesdirectory)'
+            SourceFolder: '$(Build.sourcesdirectory)'
             Contents: |
               **/*.php
               **/*.css
-              **/*.yml
-            TargetFolder: '$(build.artifactstagingdirectory)'
+            TargetFolder: '$(Build.artifactstagingdirectory)'
         - task: ArchiveFiles@2
           inputs:
-            rootFolderOrFile: '$(Build.BinariesDirectory)'
+            rootFolderOrFile: '$(Build.artifactstagingdirectory)'
             includeRootFolder: false
             archiveType: 'zip'
             archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
