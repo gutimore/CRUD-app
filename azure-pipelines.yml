@@ -5,49 +5,49 @@
 
 trigger:
 - master
-
-- stage: 'Build'
-  displayName: 'Build the web application'
-  jobs:
-    - job: 'Build'
-      displayName: 'Build job'
-      pool:
-        vmImage: 'ubuntu-latest'
-      variables:
-        phpVersion: 7.2
-      steps:
-      - task: CopyFiles@2
-        displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
-        inputs:
-          SourceFolder: '$(build.sourcesdirectory)'
-          Contents: |
-          **/*.php
-          **/*.css
-          **/*.yml
-        TargetFolder: '$(build.artifactstagingdirectory)'
-      - task: ArchiveFiles@2
-        inputs:
-          rootFolderOrFile: '$(Build.BinariesDirectory)'
-          includeRootFolder: false
-          archiveType: 'zip'
-          archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-          replaceExistingArchive: true
-      - task: PublishBuildArtifacts@1
-        inputs:
-          PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-          ArtifactName: 'drop'
-          publishLocation: 'Container'
-- stage: 'Dev'
-  displayName: 'Deploy the web application to dev server'
-  dependsOn: Build
-  jobs:
-  - template: deploy-stage-template.yml
-    parameters:
-      TargetEnvironment: 'dev'
-- stage: 'Preprod'
-  displayName: 'Deploy the web application to preprod server'
-  dependsOn: Dev
-  jobs:
-  - template: deploy-stage-template.yml
-    parameters:
-      TargetEnvironment: 'preprod'
+stages:
+  - stage: 'Build'
+    displayName: 'Build the web application'
+    jobs:
+      - job: 'Build'
+        displayName: 'Build job'
+        pool:
+          vmImage: 'ubuntu-latest'
+        variables:
+          phpVersion: 7.2
+        steps:
+        - task: CopyFiles@2
+          displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+          inputs:
+            SourceFolder: '$(build.sourcesdirectory)'
+            Contents: |
+              **/*.php
+              **/*.css
+              **/*.yml
+            TargetFolder: '$(build.artifactstagingdirectory)'
+        - task: ArchiveFiles@2
+          inputs:
+            rootFolderOrFile: '$(Build.BinariesDirectory)'
+            includeRootFolder: false
+            archiveType: 'zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+            replaceExistingArchive: true
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
+  - stage: 'Dev'
+    displayName: 'Deploy the web application to dev server'
+    dependsOn: Build
+    jobs:
+    - template: deploy-stage-template.yml
+      parameters:
+        TargetEnvironment: 'dev'
+  - stage: 'Preprod'
+    displayName: 'Deploy the web application to preprod server'
+    dependsOn: Dev
+    jobs:
+    - template: deploy-stage-template.yml
+      parameters:
+        TargetEnvironment: 'preprod'
