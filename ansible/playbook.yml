@@ -8,10 +8,10 @@
     resource_group: __resourceGroupName__
     location: __location__
     webapp_name: __webappName__
-    mysqlserver_name: __mysqlServerName_dev__
+    mysqlserver_name: __mysqlServerName__
     mysqldb_name: __mysqlDbName__
-    admin_username: __mysqlUsername_dev__
-    admin_password: __mysqlPassword_dev__
+    admin_username: __mysqlUsername__
+    admin_password: __mysqlPassword__
     asp_name: __asp_name__
 
 
