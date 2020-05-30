@@ -39,6 +39,8 @@ stages:
   - stage: 'Dev'
     displayName: 'Deploy the web application to dev server'
     dependsOn: Build
+    variables:
+    - group: dev
     jobs:
     - template: deploy-stage-template.yml
       parameters:
