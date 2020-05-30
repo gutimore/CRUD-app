@@ -26,7 +26,7 @@ jobs:
         azureSubscription: 'AzureRmPipeline-conn'
         ServerName: '$(mysqlServerName).mysql.database.azure.com'
         DatabaseName: '$(mysqlDbName)'
-        SqlUsername: '$(mysqlUsername)'
+        SqlUsername: '$(mysqlUsername)@$(mysqlServerName)'
         SqlPassword: '$(mysqlPassword)'
         TaskNameSelector: 'SqlTaskFile'
         SqlFile: 'sql/users.sql'
