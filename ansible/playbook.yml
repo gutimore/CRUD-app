@@ -14,7 +14,6 @@
     admin_password: __mysqlPassword__
     asp_name: __asp_name__
 
-
   tasks:
     - name: Create a resource group
       azure_rm_resourcegroup:

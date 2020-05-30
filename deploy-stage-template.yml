@@ -29,6 +29,15 @@ jobs:
       inputs:
         ConnectionType: 'AzureRM'
         azureSubscription: 'AzureRmPipeline-conn'
+        appType: 'webAppLinux'
+        WebAppName: '$(webappName)'
+        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Azure App Service Deploy'
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'AzureRmPipeline-conn'
         WebAppName: '$(webappName)'
         Package: '$(Pipeline.Workspace)/drop/**/*.zip'
         AppSettings: '$(WebAppServerConnString_dev)'
