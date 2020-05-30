@@ -21,6 +21,16 @@ jobs:
         inventoriesRemoteMachine: 'hostList'
         inventoryHostListRemoteMachine: 'gutimore-ansible-controller.eastus.cloudapp.azure.com'
         failOnStdErr: false
+    - task: AzureMysqlDeployment@1
+      inputs:
+        azureSubscription: 'AzureRmPipeline-conn'
+        ServerName: '$(mysqlServerName).mysql.database.azure.com'
+        DatabaseName: '$(mysqlDbName)'
+        SqlUsername: '$(mysqlUsername)'
+        SqlPassword: '$(mysqlPassword)'
+        TaskNameSelector: 'SqlTaskFile'
+        SqlFile: 'sql/users.sql'
+        IpDetectionMethod: 'AutoDetect'
     - download: current
       artifact: drop
     - task: AzureRmWebAppDeployment@4
