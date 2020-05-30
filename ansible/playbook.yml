@@ -43,7 +43,7 @@
           tier: Basic
         location: "{{ location }}"
         version: "5.7"
-        enforce_ssl: True
+        enforce_ssl: false
         admin_username: "{{ admin_username }}"
         admin_password: "{{ admin_password }}"
         storage_mb: 5120
