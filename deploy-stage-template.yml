@@ -32,15 +32,3 @@ jobs:
         appType: 'webAppLinux'
         WebAppName: '$(webappName)'
         packageForLinux: '$(Pipeline.Workspace)/drop/**/*.zip'
-
-    - task: AzureRmWebAppDeployment@4
-      displayName: 'Azure App Service Deploy'
-      inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: 'AzureRmPipeline-conn'
-        WebAppName: '$(webappName)'
-        Package: '$(Pipeline.Workspace)/drop/**/*.zip'
-        AppSettings: '$(WebAppServerConnString_dev)'
-        TakeAppOfflineFlag: true
-        UseWebDeploy: true
-        RemoveAdditionalFilesFlag: true
