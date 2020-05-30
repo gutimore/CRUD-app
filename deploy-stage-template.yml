@@ -32,6 +32,7 @@ jobs:
         WebAppName: '$(webappName)'
         packageForLinux: '$(Pipeline.Workspace)/drop/**/*.zip'
     - task: AzureAppServiceSettings@1
+      displayName: 'Add connection string to Azure App Service'
       inputs:
         azureSubscription: 'AzureRmPipeline-conn'
         appName: '$(webappName)'
