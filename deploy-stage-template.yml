@@ -10,7 +10,7 @@ jobs:
     - task: qetza.replacetokens.replacetokens-task.replacetokens@3
       displayName: 'Replace variables in Ansible script to deploy Azure resources'
       inputs:
-        targetFiles: '**/*.yml'
+        targetFiles: 'ansible/*.yml'
         escapeType: none
         tokenPrefix: '__'
         tokenSuffix: '__'
