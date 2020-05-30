@@ -1,8 +1,14 @@
+parameters:
+- name: TargetEnvironment
+  type: string
+
 jobs:
   - job: 'Deploy'
     displayName: 'Deploy job'
     pool:
       vmImage: 'vs2017-win2016'
+    variables:
+      env: ${{ parameters.TargetEnvironment }}
     steps:
     - task: qetza.replacetokens.replacetokens-task.replacetokens@3
       displayName: 'Replace variables in Ansible script to deploy Azure resources'
