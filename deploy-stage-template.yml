@@ -23,7 +23,6 @@ jobs:
         failOnStdErr: false
     - download: current
       artifact: drop
-
     - task: AzureRmWebAppDeployment@4
       displayName: 'Azure App Service Deploy'
       inputs:
@@ -32,3 +31,17 @@ jobs:
         appType: 'webAppLinux'
         WebAppName: '$(webappName)'
         packageForLinux: '$(Pipeline.Workspace)/drop/**/*.zip'
+    - task: AzureAppServiceSettings@1
+      inputs:
+        azureSubscription: 'AzureRmPipeline-conn'
+        appName: '$(webappName)'
+        resourceGroupName: '$(resourceGroupName)'
+        connectionStrings: |
+          [
+            {
+              "name": "connstring",
+              "value": "$(WebAppServerConnString)",
+              "type": "MySql",
+              "slotSetting": false
+            }
+          ]
