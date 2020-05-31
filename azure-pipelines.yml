@@ -38,6 +38,11 @@ stages:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
             ArtifactName: 'drop'
             publishLocation: 'Container'
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.SourcesDirectory)/ansible/playbook.yml'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
   - stage: 'Dev'
     displayName: 'Deploy the web application to dev server'
     dependsOn: Build
