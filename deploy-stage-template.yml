@@ -41,7 +41,7 @@ jobs:
               SqlUsername: '$(mysqlUsername)@$(mysqlServerName)'
               SqlPassword: '$(mysqlPassword)'
               TaskNameSelector: 'SqlTaskFile'
-              SqlFile: ''$(Build.SourcesDirectory)/sql/users.sql'
+              SqlFile: '$(Build.SourcesDirectory)/sql/users.sql'
               IpDetectionMethod: 'AutoDetect'
           - download: current
             artifact: drop
