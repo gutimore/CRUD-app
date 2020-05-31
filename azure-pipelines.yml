@@ -47,7 +47,7 @@ stages:
             publishLocation: 'Container'
         - task: PublishBuildArtifacts@1
           inputs:
-            PathtoPublish: '$(Build.SourcesDirectory)/ansible$(Build.BuildId).zip'
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)/ansible$(Build.BuildId).zip'
             ArtifactName: 'drop'
             publishLocation: 'Container'
   - stage: 'Dev'
