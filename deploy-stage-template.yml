@@ -21,10 +21,6 @@ jobs:
               archiveFilePatterns: '$(Pipeline.Workspace)/drop/ansible*.zip'
               destinationFolder: '$(Pipeline.Workspace)/ansible'
               cleanDestinationFolder: true
-          - task: PowerShell@2
-            inputs:
-              targetType: 'inline'
-              script: 'ls $(Pipeline.Workspace)/ansible'
           - task: qetza.replacetokens.replacetokens-task.replacetokens@3
             displayName: 'Replace variables in Ansible script to deploy Azure resources'
             inputs:
@@ -37,7 +33,7 @@ jobs:
               ansibleInterface: 'remoteMachine'
               connectionOverSsh: 'AnsibleVMSSHConn'
               playbookSourceRemoteMachine: 'agentMachine'
-              playbookRootRemoteMachine: '$(Build.SourcesDirectory)/ansible'
+              playbookRootRemoteMachine: '$(Pipeline.Workspace)/ansible'
               playbookPathLinkedArtifactOnRemoteMachine: 'playbook.yml'
               inventoriesRemoteMachine: 'hostList'
               inventoryHostListRemoteMachine: 'gutimore-ansible-controller.eastus.cloudapp.azure.com'
