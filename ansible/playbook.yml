@@ -12,7 +12,8 @@
     mysqldb_name: __mysqlDbName__
     admin_username: __mysqlUsername__
     admin_password: __mysqlPassword__
-    asp_name: __asp_name__
+    asp_name: __aspName__
+    connection_string: __WebAppServerConnString__
 
   tasks:
     - name: Create a resource group
@@ -24,6 +25,8 @@
       azure_rm_webapp:
         resource_group: "{{ resource_group }}"
         name: "{{ webapp_name }}"
+        app_settings:
+          connection_string: "{{ connection_string }}"
         plan:
           resource_group: "{{ resource_group }}"
           name: "{{ asp_name }}"
@@ -47,6 +50,7 @@
         admin_username: "{{ admin_username }}"
         admin_password: "{{ admin_password }}"
         storage_mb: 5120
+
     - name: Open firewall to access MySQL Server from outside
       azure_rm_resource:
         api_version: '2017-12-01'
