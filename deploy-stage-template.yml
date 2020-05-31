@@ -10,57 +10,60 @@ jobs:
     environment: ${{ parameters.TargetEnvironment }}
     variables:
       env: ${{ parameters.TargetEnvironment }}
-    steps:
-    - task: qetza.replacetokens.replacetokens-task.replacetokens@3
-      displayName: 'Replace variables in Ansible script to deploy Azure resources'
-      inputs:
-        targetFiles: 'ansible/*.yml'
-        escapeType: none
-        tokenPrefix: '__'
-        tokenSuffix: '__'
-    - task: Ansible@0
-      inputs:
-        ansibleInterface: 'remoteMachine'
-        connectionOverSsh: 'AnsibleVMSSHConn'
-        playbookSourceRemoteMachine: 'agentMachine'
-        playbookRootRemoteMachine: '$(System.DefaultWorkingDirectory)/ansible'
-        playbookPathLinkedArtifactOnRemoteMachine: 'playbook.yml'
-        inventoriesRemoteMachine: 'hostList'
-        inventoryHostListRemoteMachine: 'gutimore-ansible-controller.eastus.cloudapp.azure.com'
-        failOnStdErr: false
-    - task: AzureMysqlDeployment@1
-      inputs:
-        azureSubscription: 'AzureRmPipeline-conn'
-        ServerName: '$(mysqlServerName).mysql.database.azure.com'
-        DatabaseName: '$(mysqlDbName)'
-        SqlUsername: '$(mysqlUsername)@$(mysqlServerName)'
-        SqlPassword: '$(mysqlPassword)'
-        TaskNameSelector: 'SqlTaskFile'
-        SqlFile: 'sql/users.sql'
-        IpDetectionMethod: 'AutoDetect'
-    - download: current
-      artifact: drop
-    - task: AzureRmWebAppDeployment@4
-      displayName: 'Azure App Service Deploy'
-      inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: 'AzureRmPipeline-conn'
-        appType: 'webAppLinux'
-        WebAppName: '$(webappName)'
-        packageForLinux: '$(Pipeline.Workspace)/drop/**/*.zip'
-        DeploymentType: 'zipDeploy'
-    - task: AzureAppServiceSettings@1
-      displayName: 'Add connection string to Azure App Service'
-      inputs:
-        azureSubscription: 'AzureRmPipeline-conn'
-        appName: '$(webappName)'
-        resourceGroupName: '$(resourceGroupName)'
-        connectionStrings: |
-          [
-            {
-              "name": "connstring",
-              "value": "$(WebAppServerConnString)",
-              "type": "MySql",
-              "slotSetting": false
-            }
-          ]
+    strategy: 
+      runOnce:
+        deploy:
+          steps:
+          - task: qetza.replacetokens.replacetokens-task.replacetokens@3
+            displayName: 'Replace variables in Ansible script to deploy Azure resources'
+            inputs:
+              targetFiles: 'ansible/*.yml'
+              escapeType: none
+              tokenPrefix: '__'
+              tokenSuffix: '__'
+          - task: Ansible@0
+            inputs:
+              ansibleInterface: 'remoteMachine'
+              connectionOverSsh: 'AnsibleVMSSHConn'
+              playbookSourceRemoteMachine: 'agentMachine'
+              playbookRootRemoteMachine: '$(System.DefaultWorkingDirectory)/ansible'
+              playbookPathLinkedArtifactOnRemoteMachine: 'playbook.yml'
+              inventoriesRemoteMachine: 'hostList'
+              inventoryHostListRemoteMachine: 'gutimore-ansible-controller.eastus.cloudapp.azure.com'
+              failOnStdErr: false
+          - task: AzureMysqlDeployment@1
+            inputs:
+              azureSubscription: 'AzureRmPipeline-conn'
+              ServerName: '$(mysqlServerName).mysql.database.azure.com'
+              DatabaseName: '$(mysqlDbName)'
+              SqlUsername: '$(mysqlUsername)@$(mysqlServerName)'
+              SqlPassword: '$(mysqlPassword)'
+              TaskNameSelector: 'SqlTaskFile'
+              SqlFile: 'sql/users.sql'
+              IpDetectionMethod: 'AutoDetect'
+          - download: current
+            artifact: drop
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Azure App Service Deploy'
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'AzureRmPipeline-conn'
+              appType: 'webAppLinux'
+              WebAppName: '$(webappName)'
+              packageForLinux: '$(Pipeline.Workspace)/drop/**/*.zip'
+              DeploymentType: 'zipDeploy'
+          - task: AzureAppServiceSettings@1
+            displayName: 'Add connection string to Azure App Service'
+            inputs:
+              azureSubscription: 'AzureRmPipeline-conn'
+              appName: '$(webappName)'
+              resourceGroupName: '$(resourceGroupName)'
+              connectionStrings: |
+                [
+                  {
+                    "name": "connstring",
+                    "value": "$(WebAppServerConnString)",
+                    "type": "MySql",
+                    "slotSetting": false
+                  }
+                ]
