@@ -29,6 +29,16 @@ jobs:
               escapeType: none
               tokenPrefix: '__'
               tokenSuffix: '__'
+          - task: CopyFilesOverSSH@0
+            inputs:
+              sshEndpoint: 'AnsibleVMSSHConn'
+              sourceFolder: '$(Pipeline.Workspace)/drop'
+              contents: 'ansible*.zip'
+              targetFolder: '/tmp/pipeline/'
+              cleanTargetFolder: true
+              overwrite: true
+              #failOnEmptySource: false # Optional
+              #flattenFolders: false # Optional
           - task: Ansible@0
             displayName: 'Deploy infrastructure using ansible'
             inputs:
