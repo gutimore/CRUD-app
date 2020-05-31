@@ -12,7 +12,7 @@ jobs:
       env: ${{ parameters.TargetEnvironment }}
     strategy: 
       runOnce:
-        deploy:
+        preDeploy:
           steps:
           - task: qetza.replacetokens.replacetokens-task.replacetokens@3
             displayName: 'Replace variables in Ansible script to deploy Azure resources'
@@ -21,6 +21,8 @@ jobs:
               escapeType: none
               tokenPrefix: '__'
               tokenSuffix: '__'
+        deploy:
+          steps:
           - task: Ansible@0
             inputs:
               ansibleInterface: 'remoteMachine'
