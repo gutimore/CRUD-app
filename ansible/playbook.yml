@@ -26,7 +26,7 @@
         resource_group: "{{ resource_group }}"
         name: "{{ webapp_name }}"
         app_settings:
-          connection_string: "{{ connection_string }}"
+          MYSQLCONNSTR_connstring: "{{ connection_string }}"
         plan:
           resource_group: "{{ resource_group }}"
           name: "{{ asp_name }}"
