@@ -17,7 +17,7 @@ jobs:
           - task: qetza.replacetokens.replacetokens-task.replacetokens@3
             displayName: 'Replace variables in Ansible script to deploy Azure resources'
             inputs:
-              targetFiles: 'ansible/*.yml'
+              targetFiles: '$(Build.SourcesDirectory)/ansible/*.yml'
               escapeType: none
               tokenPrefix: '__'
               tokenSuffix: '__'
@@ -28,7 +28,7 @@ jobs:
               ansibleInterface: 'remoteMachine'
               connectionOverSsh: 'AnsibleVMSSHConn'
               playbookSourceRemoteMachine: 'agentMachine'
-              playbookRootRemoteMachine: '$(System.DefaultWorkingDirectory)/ansible'
+              playbookRootRemoteMachine: '$(Build.SourcesDirectory)/ansible'
               playbookPathLinkedArtifactOnRemoteMachine: 'playbook.yml'
               inventoriesRemoteMachine: 'hostList'
               inventoryHostListRemoteMachine: 'gutimore-ansible-controller.eastus.cloudapp.azure.com'
@@ -41,7 +41,7 @@ jobs:
               SqlUsername: '$(mysqlUsername)@$(mysqlServerName)'
               SqlPassword: '$(mysqlPassword)'
               TaskNameSelector: 'SqlTaskFile'
-              SqlFile: 'sql/users.sql'
+              SqlFile: ''$(Build.SourcesDirectory)/sql/users.sql'
               IpDetectionMethod: 'AutoDetect'
           - download: current
             artifact: drop
