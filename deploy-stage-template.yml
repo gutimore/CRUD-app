@@ -18,7 +18,7 @@ jobs:
             artifact: drop
           - task: ExtractFiles@1
             inputs:
-              archiveFilePatterns: 'ansible*.zip'
+              archiveFilePatterns: '$(Pipeline.Workspace)/drop/ansible*.zip'
               destinationFolder: '$(Pipeline.Workspace)/ansible'
               cleanDestinationFolder: true
           - task: PowerShell@2
