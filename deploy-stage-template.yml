@@ -12,12 +12,12 @@ jobs:
       env: ${{ parameters.TargetEnvironment }}
     strategy: 
       runOnce:
-        preDeploy:
+        deploy:
           steps:
           - task: PowerShell@2
             inputs:
               targetType: 'inline'
-              script: 'Get-ChildItem'
+              script: 'Get-ChildItem $(Pipeline.Workspace)'
           - task: qetza.replacetokens.replacetokens-task.replacetokens@3
             displayName: 'Replace variables in Ansible script to deploy Azure resources'
             inputs:
@@ -25,8 +25,6 @@ jobs:
               escapeType: none
               tokenPrefix: '__'
               tokenSuffix: '__'
-        deploy:
-          steps:
           - task: Ansible@0
             inputs:
               ansibleInterface: 'remoteMachine'
