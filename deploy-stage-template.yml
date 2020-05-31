@@ -3,7 +3,7 @@ parameters:
   type: string
 
 jobs:
-  - job: 'Deploy'
+  - deployment: DeployWeb
     displayName: 'Deploy job'
     pool:
       vmImage: 'vs2017-win2016'
