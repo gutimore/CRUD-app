@@ -19,7 +19,7 @@ stages:
           phpVersion: 7.2
         steps:
         - task: CopyFiles@2
-          displayName: 'Copy Files to: $(Build.artifactstagingdirectory)'
+          displayName: 'Copy source code files to: $(Build.artifactstagingdirectory)'
           inputs:
             SourceFolder: '$(Build.sourcesdirectory)'
             Contents: |
@@ -27,6 +27,7 @@ stages:
               **/*.css
             TargetFolder: '$(Build.artifactstagingdirectory)'
         - task: ArchiveFiles@2
+          displayName: 'Archive source code to: code$(Build.BuildId).zip'
           inputs:
             rootFolderOrFile: '$(Build.artifactstagingdirectory)/code'
             includeRootFolder: false
@@ -34,6 +35,7 @@ stages:
             archiveFile: '$(Build.ArtifactStagingDirectory)/code$(Build.BuildId).zip'
             replaceExistingArchive: true
         - task: ArchiveFiles@2
+          displayName: 'Archive ansible folder to: ansible$(Build.BuildId).zip'
           inputs:
             rootFolderOrFile: '$(Build.SourcesDirectory)/ansible'
             includeRootFolder: false
@@ -41,16 +43,19 @@ stages:
             archiveFile: '$(Build.ArtifactStagingDirectory)/ansible$(Build.BuildId).zip'
             replaceExistingArchive: true
         - task: PublishBuildArtifacts@1
+          displayName: 'Publish archived source code'
           inputs:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)/code$(Build.BuildId).zip'
             ArtifactName: 'drop'
             publishLocation: 'Container'
         - task: PublishBuildArtifacts@1
+          displayName: 'Publish archived ansible folder'
           inputs:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)/ansible$(Build.BuildId).zip'
             ArtifactName: 'drop'
             publishLocation: 'Container'
         - task: PublishBuildArtifacts@1
+          displayName: 'Publish mysql init script'
           inputs:
             PathtoPublish: '$(Build.sourcesdirectory)/sql/users.sql'
             ArtifactName: 'drop'

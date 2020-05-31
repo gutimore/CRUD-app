@@ -17,18 +17,20 @@ jobs:
           - download: current
             artifact: drop
           - task: ExtractFiles@1
+            displayName: 'Extract ansible folder'
             inputs:
               archiveFilePatterns: '$(Pipeline.Workspace)/drop/ansible*.zip'
               destinationFolder: '$(Pipeline.Workspace)/ansible'
               cleanDestinationFolder: true
           - task: qetza.replacetokens.replacetokens-task.replacetokens@3
-            displayName: 'Replace variables in Ansible script to deploy Azure resources'
+            displayName: 'Replace variables in Ansible scripts'
             inputs:
               targetFiles: '$(Pipeline.Workspace)/ansible/*.yml'
               escapeType: none
               tokenPrefix: '__'
               tokenSuffix: '__'
           - task: Ansible@0
+            displayName: 'Deploy infrastructure using ansible'
             inputs:
               ansibleInterface: 'remoteMachine'
               connectionOverSsh: 'AnsibleVMSSHConn'
@@ -39,6 +41,7 @@ jobs:
               inventoryHostListRemoteMachine: 'gutimore-ansible-controller.eastus.cloudapp.azure.com'
               failOnStdErr: false
           - task: AzureMysqlDeployment@1
+            displayName: 'Deploy mysql server'
             inputs:
               azureSubscription: 'AzureRmPipeline-conn'
               ServerName: '$(mysqlServerName).mysql.database.azure.com'
