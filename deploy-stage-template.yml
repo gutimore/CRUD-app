@@ -19,7 +19,7 @@ jobs:
           - task: PowerShell@2
             inputs:
               targetType: 'inline'
-              script: 'Get-ChildItem $(Pipeline.Workspace)/a'
+              script: 'tree $(Pipeline.Workspace)'
           - task: qetza.replacetokens.replacetokens-task.replacetokens@3
             displayName: 'Replace variables in Ansible script to deploy Azure resources'
             inputs:
