@@ -55,7 +55,7 @@ jobs:
               azureSubscription: 'AzureRmPipeline-conn'
               appType: 'webAppLinux'
               WebAppName: '$(webappName)'
-              packageForLinux: '$(Pipeline.Workspace)/drop/**/*.zip'
+              packageForLinux: '$(Pipeline.Workspace)/drop/**/code*.zip'
               DeploymentType: 'zipDeploy'
           - task: AzureAppServiceSettings@1
             displayName: 'Add connection string to Azure App Service'
