@@ -16,10 +16,15 @@ jobs:
           steps:
           - download: current
             artifact: drop
+          - task: ExtractFiles@1
+            inputs:
+              archiveFilePatterns: 'ansible*.zip'
+              destinationFolder: '$(Pipeline.Workspace)/ansible'
+              cleanDestinationFolder: true
           - task: PowerShell@2
             inputs:
               targetType: 'inline'
-              script: 'tree $(Pipeline.Workspace)\drop'
+              script: 'ls $(Pipeline.Workspace)/ansible'
           - task: qetza.replacetokens.replacetokens-task.replacetokens@3
             displayName: 'Replace variables in Ansible script to deploy Azure resources'
             inputs:
