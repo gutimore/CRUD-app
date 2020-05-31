@@ -7,6 +7,7 @@ jobs:
     displayName: 'Deploy job'
     pool:
       vmImage: 'vs2017-win2016'
+    environment: ${{ parameters.TargetEnvironment }}
     variables:
       env: ${{ parameters.TargetEnvironment }}
     steps:
