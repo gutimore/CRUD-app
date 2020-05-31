@@ -46,7 +46,7 @@ jobs:
               SqlUsername: '$(mysqlUsername)@$(mysqlServerName)'
               SqlPassword: '$(mysqlPassword)'
               TaskNameSelector: 'SqlTaskFile'
-              SqlFile: '$(Build.SourcesDirectory)/sql/users.sql'
+              SqlFile: '$(Pipeline.Workspace)/drop/users.sql'
               IpDetectionMethod: 'AutoDetect'
           - task: AzureRmWebAppDeployment@4
             displayName: 'Azure App Service Deploy'
