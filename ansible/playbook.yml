@@ -59,6 +59,7 @@
         src: '/tmp/pipeline/*.zip'
         dest: '/home/site/wwwroot'
         protocol: ftps
+        ftp_mode: 'active'
         direction: push
 
     - name: Create MySQL Server
