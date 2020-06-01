@@ -45,7 +45,7 @@
   
     - name: Display all variables/facts known for a host
       debug:
-        msg: "{{find_output}}"
+        msg: "{{find_output[localhost].msg.webapps[0]}}"
 
     - name: Create MySQL Server
       azure_rm_mysqlserver:
