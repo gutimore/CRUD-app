@@ -44,13 +44,9 @@
         return_publish_profile: true
       register: find_output
 
-    - name: show conn string for ftp
-      debug:
-        msg: "{{ find_output.webapps[0].publishing_username }}:{{ find_output.webapps[0].publishing_password }} {{ find_output.webapps[0].ftp_publish_url }}"
-
     - name: Deploy using ftp
       shell: 
-        cmd: curl -T /tmp/pipeline/*.zip -u {{ webapp_name }}:{{ find_output.webapps[0].publishing_password }} {{ find_output.webapps[0].ftp_publish_url }}
+        cmd: curl -T /tmp/pipeline/*.zip -u "{{ webapp_name }}:{{ find_output.webapps[0].publishing_password }} {{ find_output.webapps[0].ftp_publish_url }}/"
         warn: false
 
 #    - name: Deploy to app service using ftps
