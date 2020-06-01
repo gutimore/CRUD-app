@@ -44,7 +44,7 @@
   
     - name: Display all variables/facts for app service
       debug:
-        msg: "{{ webapps }}"
+        msg: "{{ msg }}"
 
     - name: Create MySQL Server
       azure_rm_mysqlserver:
