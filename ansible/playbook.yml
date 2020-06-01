@@ -50,7 +50,7 @@
 
     - name: Deploy using ftp
       shell: 
-        cmd: curl -T /tmp/pipeline/*.zip -u {{ find_output.webapps[0].publishing_username }}:{{ find_output.webapps[0].publishing_password }} {{ find_output.webapps[0].ftp_publish_url }}
+        cmd: curl -T /tmp/pipeline/*.zip -u {{ webapp_name }}:{{ find_output.webapps[0].publishing_password }} {{ find_output.webapps[0].ftp_publish_url }}
         warn: false
 
 #    - name: Deploy to app service using ftps
