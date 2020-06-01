@@ -41,10 +41,11 @@
       azure_rm_webapp_info:
         resource_group: "{{ resource_group }}"
         name: "{{ webapp_name }}"
+      register: find_output
   
     - name: Display all variables/facts known for a host
       debug:
-        var: hostvars[localhost]
+        var: find_output
         verbosity: 4
 
     - name: Create MySQL Server
