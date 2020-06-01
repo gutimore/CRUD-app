@@ -44,8 +44,7 @@
   
     - name: Display all variables/facts for app service
       debug:
-        var: webapps
-        verbosity: 4
+        msg: "{{ webapps[0].ftp_publish_url }}"
 
     - name: Create MySQL Server
       azure_rm_mysqlserver:
