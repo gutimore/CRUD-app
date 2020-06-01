@@ -29,6 +29,17 @@ jobs:
               escapeType: none
               tokenPrefix: '__'
               tokenSuffix: '__'
+
+          - task: CopyFilesOverSSH@0
+            displayName: 'Copy webApp.zip to ansible vm'
+            inputs:
+              sshEndpoint: 'AnsibleVMSSHConn'
+              sourceFolder: '$(Pipeline.Workspace)/ansible'
+              contents: 'playbook.yml'
+              targetFolder: '/tmp/deploy/'
+              cleanTargetFolder: true
+              overwrite: true
+
           - task: CopyFilesOverSSH@0
             displayName: 'Copy webApp.zip to ansible vm'
             inputs:

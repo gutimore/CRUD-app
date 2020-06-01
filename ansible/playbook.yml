@@ -52,7 +52,7 @@
         user: "{{ webapp_name }}"
         password: "{{ find_output.webapps[0].publishing_password }}"
         src: /tmp/deploy/webApp.zip
-        dest: 'data/SitePackages/webApp.zip'
+        dest: 'data/SitePackages'
         protocol: ftps
         direction: push
       become: true
