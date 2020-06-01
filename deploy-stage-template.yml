@@ -47,7 +47,6 @@ jobs:
               sourceFolder: '$(Pipeline.Workspace)/drop'
               contents: 'webApp.zip'
               targetFolder: '/tmp/deploy/'
-              cleanTargetFolder: true
               overwrite: true
           - task: CopyFilesOverSSH@0
             displayName: 'Copy packagename.txt to ansible vm'
