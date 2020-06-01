@@ -34,6 +34,13 @@ stages:
             archiveType: 'zip'
             archiveFile: '$(Build.ArtifactStagingDirectory)/webApp.zip'
             replaceExistingArchive: true
+        - task: PowerShell@2
+          displayName: 'Create config file for zip deployment'
+          inputs:
+            targetType: 'inline'
+            script: |
+              New-Item $(Build.SourcesDirectory)/ansible/packagename.txt
+              Set-Content $(Build.SourcesDirectory)/ansible/packagename.txt 'webApp.zip'
         - task: ArchiveFiles@2
           displayName: 'Archive ansible folder to: ansible$(Build.BuildId).zip'
           inputs:
