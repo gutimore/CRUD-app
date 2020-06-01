@@ -55,6 +55,7 @@
         dest: 'data/SitePackages/webApp.zip'
         protocol: ftps
         direction: push
+      become: true
 
     - name: Configure app service
       local_action:
