@@ -45,8 +45,7 @@
   
     - name: Display all variables/facts known for a host
       debug:
-        var: find_output
-        verbosity: 4
+        msg: "{{find_output}}"
 
     - name: Create MySQL Server
       azure_rm_mysqlserver:
