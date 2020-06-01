@@ -27,12 +27,12 @@ stages:
               **/*.css
             TargetFolder: '$(Build.artifactstagingdirectory)'
         - task: ArchiveFiles@2
-          displayName: 'Archive source code to: code$(Build.BuildId).zip'
+          displayName: 'Archive source code to: webApp.zip'
           inputs:
             rootFolderOrFile: '$(Build.artifactstagingdirectory)/code'
             includeRootFolder: false
             archiveType: 'zip'
-            archiveFile: '$(Build.ArtifactStagingDirectory)/code$(Build.BuildId).zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/webApp.zip'
             replaceExistingArchive: true
         - task: ArchiveFiles@2
           displayName: 'Archive ansible folder to: ansible$(Build.BuildId).zip'

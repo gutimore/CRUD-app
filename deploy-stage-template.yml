@@ -33,8 +33,8 @@ jobs:
             inputs:
               sshEndpoint: 'AnsibleVMSSHConn'
               sourceFolder: '$(Pipeline.Workspace)/drop'
-              contents: 'ansible*.zip'
-              targetFolder: '/tmp/pipeline/'
+              contents: 'webApp.zip, packagename.txt'
+              targetFolder: '/tmp/deploy/'
               cleanTargetFolder: true
               overwrite: true
               #failOnEmptySource: false # Optional
