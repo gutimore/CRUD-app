@@ -38,15 +38,11 @@ jobs:
               targetFolder: '/tmp/deploy/'
               cleanTargetFolder: true
               overwrite: true
-          - copy:
-              displayName: 'Create config file'
-              content: "webApp.zip"
-              dest: "/tmp/deploy/packagename.txt"
           - task: CopyFilesOverSSH@0
             displayName: 'Copy packagename.txt to ansible vm'
             inputs:
               sshEndpoint: 'AnsibleVMSSHConn'
-              sourceFolder: '/tmp/deploy'
+              sourceFolder: '$(Pipeline.Workspace)/ansible/'
               contents: 'packagename.txt'
               targetFolder: '/tmp/deploy/'
               overwrite: true
