@@ -78,12 +78,3 @@ jobs:
               TaskNameSelector: 'SqlTaskFile'
               SqlFile: '$(Pipeline.Workspace)/drop/users.sql'
               IpDetectionMethod: 'AutoDetect'
-          - task: AzureRmWebAppDeployment@4
-            displayName: 'Azure App Service Deploy'
-            inputs:
-              ConnectionType: 'AzureRM'
-              azureSubscription: 'AzureRmPipeline-conn'
-              appType: 'webAppLinux'
-              WebAppName: '$(webappName)'
-              packageForLinux: '$(Pipeline.Workspace)/drop/**/code*.zip'
-              DeploymentType: 'zipDeploy'
