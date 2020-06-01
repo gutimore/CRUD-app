@@ -54,10 +54,11 @@
       local_action:
         module: ftp
         host: waws-prod-blu-173.ftp.azurewebsites.windows.net
-        user: "webapp_name\${{ webapp_name }}"
+        user: "${{ webapp_name }}"
         password: find_output.webapps[0].publishing_password
         src: '/tmp/pipeline/*.zip'
         dest: '/home/site/wwwroot'
+        protocol: ftps
         direction: push
 
     - name: Create MySQL Server
