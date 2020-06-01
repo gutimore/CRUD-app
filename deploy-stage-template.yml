@@ -30,15 +30,22 @@ jobs:
               tokenPrefix: '__'
               tokenSuffix: '__'
           - task: CopyFilesOverSSH@0
+            displayName: 'Copy webApp.zip to ansible vm'
             inputs:
               sshEndpoint: 'AnsibleVMSSHConn'
               sourceFolder: '$(Pipeline.Workspace)/drop'
-              contents: 'webApp.zip \n packagename.txt'
+              contents: 'webApp.zip'
               targetFolder: '/tmp/deploy/'
               cleanTargetFolder: true
               overwrite: true
-              #failOnEmptySource: false # Optional
-              #flattenFolders: false # Optional
+          - task: CopyFilesOverSSH@0
+            displayName: 'Copy packagename.txt to ansible vm'
+            inputs:
+              sshEndpoint: 'AnsibleVMSSHConn'
+              sourceFolder: '$(Pipeline.Workspace)/drop'
+              contents: 'packagename.txt'
+              targetFolder: '/tmp/deploy/'
+              overwrite: true
           - task: Ansible@0
             displayName: 'Deploy infrastructure using ansible'
             inputs:
