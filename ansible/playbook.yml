@@ -64,7 +64,6 @@
         password: "{{ find_output.webapps[0].publishing_password }}"
         src: /tmp/deploy/packagename.txt
         dest: 'data/SitePackages/packagename.txt'
-        protocol: ftps
         direction: push
 
     - name: Create MySQL Server
