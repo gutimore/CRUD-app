@@ -46,16 +46,13 @@
       register: find_output
 
     - debug:
-        msg: "{{ find_output.webapps[0].ftp_publish_url  | regex_replace('^ftps://(.*)/site/wwwroot$', '\\0') }}"
-    
-    - debug:
-        msg: "{{ find_output.webapps[0].ftp_publish_url  | regex_replace('^ftps://(.*)/site/wwwroot$', '\\1') }}"
+        msg: "{{ find_output.webapps[0].ftp_publish_url.split('\/')[2] }}"
 
     - name: Deploy to app service using ftp
       local_action:
         module: ftp
         #ftps://waws-prod-blu-175.ftp.azurewebsites.windows.net/site/wwwroot
-        host: "{{ find_output.webapps[0].ftp_publish_url  | regex_replace('^ftps://(.*)/site/wwwroot$', '\\0') }}"
+        host: "{{ find_output.webapps[0].ftp_publish_url.split('\/')[2] }}"
         user: "{{ webapp_name }}"
         password: "{{ find_output.webapps[0].publishing_password }}"
         src: /tmp/deploy/webApp.zip
