@@ -37,6 +37,16 @@
           - name: "php"
             version: "7.3"
 
+    - name: Fetch app service facts
+      azure_rm_webapp_info:
+        resource_group: "{{ resource_group }}"
+        name: "{{ webapp_name }}"
+  
+    - name: Display all variables/facts for app service
+      debug:
+        var: webapps
+        verbosity: 4
+
     - name: Create MySQL Server
       azure_rm_mysqlserver:
         resource_group: "{{ resource_group }}"
