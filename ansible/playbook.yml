@@ -27,6 +27,7 @@
         name: "{{ webapp_name }}"
         app_settings:
           connstring: "{{ connection_string }}"
+          WEBSITE_RUN_FROM_PACKAGE: "1"
         plan:
           resource_group: "{{ resource_group }}"
           name: "{{ asp_name }}"
