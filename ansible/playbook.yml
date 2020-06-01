@@ -42,9 +42,10 @@
         resource_group: "{{ resource_group }}"
         name: "{{ webapp_name }}"
   
-    - name: Display all variables/facts for app service
+    - name: Display all variables/facts known for a host
       debug:
-        msg: "{{ msg }}"
+        var: hostvars[localhost]
+        verbosity: 4
 
     - name: Create MySQL Server
       azure_rm_mysqlserver:
