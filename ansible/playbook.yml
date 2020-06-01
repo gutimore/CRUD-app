@@ -45,7 +45,7 @@
         return_publish_profile: true
       register: find_output
 
-    - name: Deploy to app service using ftps
+    - name: Deploy to app service using ftp
       local_action:
         module: ftp
         host: waws-prod-blu-173.ftp.azurewebsites.windows.net
