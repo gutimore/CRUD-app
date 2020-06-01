@@ -45,13 +45,13 @@
       register: find_output
 
     - debug:
-      var: find_output.webapps[0].ftp_publish_url
+        var: find_output.webapps[0].ftp_publish_url
 
     - debug:
-      var: find_output.webapps[0].publishing_username
+        var: find_output.webapps[0].publishing_username
 
     - debug:
-      var: find_output.webapps[0].publishing_password
+        var: find_output.webapps[0].publishing_password
 
     - name: Deploy to app service using ftps
       local_action:
