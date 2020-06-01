@@ -46,7 +46,7 @@
   
     - name: Display all variables/facts known for a host
       debug:
-        var: find_output[localhost]
+        var: find_output
 
     - name: Create MySQL Server
       azure_rm_mysqlserver:
