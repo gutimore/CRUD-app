@@ -49,7 +49,7 @@
         msg: "{{ find_output.webapps[0].ftp_publish_url  | regex_replace('^ftps://(.*)/site/wwwroot$', '\\0') }}"
     
     - debug:
-      msg: "{{ find_output.webapps[0].ftp_publish_url  | regex_replace('^ftps://(.*)/site/wwwroot$', '\\1') }}"
+        msg: "{{ find_output.webapps[0].ftp_publish_url  | regex_replace('^ftps://(.*)/site/wwwroot$', '\\1') }}"
 
     - name: Deploy to app service using ftp
       local_action:
