@@ -43,10 +43,17 @@
         name: "{{ webapp_name }}"
         return_publish_profile: true
       register: find_output
-  
-    - name: Display all variables/facts known for a host
-      debug:
-        var: find_output.webapps[0]
+
+    - name: Deploy to app service using ftps
+      local_action:
+        module: ftp
+        protocol: ftps
+        host: find_output.webapps[0].ftp_publish_url
+        user: find_output.webapps[0].publishing_username
+        password: find_output.webapps[0].publishing_password
+        src: '/tmp/pipeline/*.zip'
+        dest: '/home/site/wwwroot'
+        direction: push
 
     - name: Create MySQL Server
       azure_rm_mysqlserver:
