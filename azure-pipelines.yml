@@ -45,7 +45,7 @@ stages:
         - task: PublishBuildArtifacts@1
           displayName: 'Publish archived source code'
           inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)/code$(Build.BuildId).zip'
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)/webApp.zip'
             ArtifactName: 'drop'
             publishLocation: 'Container'
         - task: PublishBuildArtifacts@1
