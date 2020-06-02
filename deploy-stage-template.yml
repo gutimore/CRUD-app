@@ -18,7 +18,7 @@ jobs:
           - download: current
             artifact: drop
           - task: ExtractFiles@1
-            displayName: 'Extract ansible folder'
+            displayName: 'Extract artifact folder'
             inputs:
               archiveFilePatterns: '$(Pipeline.Workspace)/drop/artifact*.zip'
               destinationFolder: '$(artifactFolder)'
@@ -35,7 +35,9 @@ jobs:
             inputs:
               sshEndpoint: 'AnsibleVMSSHConn'
               sourceFolder: '$(artifactFolder)'
-              contents: 'webApp.zip \n packagename.txt'
+              contents: |
+                'webApp.zip'
+                'packagename.txt'
               targetFolder: '/tmp/deploy/'
               overwrite: true
           - task: Ansible@0
