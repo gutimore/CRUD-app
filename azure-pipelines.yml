@@ -57,7 +57,7 @@ stages:
             archiveFile: '$(Build.ArtifactStagingDirectory)/artifact$(Build.BuildId).zip'
             replaceExistingArchive: true
         - task: PublishBuildArtifacts@1
-          displayName: 'Publish archived ansible folder'
+          displayName: 'Publish artifact$(Build.BuildId).zip'
           inputs:
             PathtoPublish: '$(Build.ArtifactStagingDirectory)/artifact$(Build.BuildId).zip'
             ArtifactName: 'drop'
