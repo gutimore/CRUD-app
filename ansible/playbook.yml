@@ -101,6 +101,11 @@
         server_name: "{{ mysqlserver_name }}"
         name: "{{ mysqldb_name }}"
 
+    - debug:
+        msg:  >
+          mysql --user={{ admin_username }}@{{ mysqlserver_name }} --password={{ admin_password }} {{ mysqldb_name }}
+          --host={{ mysqlserver_name }}.mysql.database.azure.com < /tmp/deploy/users.sql
+
     - name: Create users table from file
       command: >
         mysql --user={{ admin_username }}@{{ mysqlserver_name }} --password={{ admin_password }} {{ mysqldb_name }}
