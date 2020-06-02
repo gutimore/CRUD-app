@@ -38,6 +38,7 @@ jobs:
               contents: |
                 webApp.zip
                 packagename.txt
+                users.sql
               targetFolder: '/tmp/deploy/'
               overwrite: true
           - task: Ansible@0
@@ -51,14 +52,3 @@ jobs:
               inventoriesRemoteMachine: 'hostList'
               inventoryHostListRemoteMachine: 'gutimore-ansible-controller.eastus.cloudapp.azure.com'
               failOnStdErr: false
-          - task: AzureMysqlDeployment@1
-            displayName: 'Deploy mysql server'
-            inputs:
-              azureSubscription: 'AzureRmPipeline-conn'
-              ServerName: '$(mysqlServerName).mysql.database.azure.com'
-              DatabaseName: '$(mysqlDbName)'
-              SqlUsername: '$(mysqlUsername)@$(mysqlServerName)'
-              SqlPassword: '$(mysqlPassword)'
-              TaskNameSelector: 'SqlTaskFile'
-              SqlFile: '$(artifactFolder)/users.sql'
-              IpDetectionMethod: 'AutoDetect'

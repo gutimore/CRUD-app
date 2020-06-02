@@ -100,3 +100,6 @@
         resource_group: "{{ resource_group }}"
         server_name: "{{ mysqlserver_name }}"
         name: "{{ mysqldb_name }}"
+
+    - name: Create users table from file
+      command: mysql -h{{ mysqlserver_name }}.mysql.database.azure.com -u{{ admin_username }}@{{ mysqlserver_name }} -p{{ admin_password }} {{ mysqldb_name }} < /tmp/deploy/users.sql
