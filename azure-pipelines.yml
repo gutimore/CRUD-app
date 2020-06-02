@@ -11,12 +11,10 @@ stages:
   - stage: 'Build'
     displayName: 'Build the web application'
     jobs:
-      - job: 'Build'
-        displayName: 'Build job'
-        pool:
-          vmImage: 'ubuntu-latest'
+      - job: 'Build01'
+        displayName: 'Pack webapp files'
         variables:
-          phpVersion: 7.2
+          artifactFolder: '$(Build.ArtifactStagingDirectory)/artifact'
         steps:
         - task: CopyFiles@2
           displayName: 'Copy source code files to: $(Build.artifactstagingdirectory)'
@@ -27,46 +25,44 @@ stages:
               **/*.css
             TargetFolder: '$(Build.artifactstagingdirectory)'
         - task: ArchiveFiles@2
-          displayName: 'Archive source code to: webApp.zip'
+          displayName: 'Archive source code as: webApp.zip'
           inputs:
             rootFolderOrFile: '$(Build.artifactstagingdirectory)/code'
             includeRootFolder: false
             archiveType: 'zip'
-            archiveFile: '$(Build.ArtifactStagingDirectory)/webApp.zip'
+            archiveFile: '$(artifactFolder)/webApp.zip'
             replaceExistingArchive: true
         - task: PowerShell@2
           displayName: 'Create config file for zip deployment'
           inputs:
             targetType: 'inline'
             script: |
-              New-Item $(Build.SourcesDirectory)/ansible/packagename.txt
-              Set-Content $(Build.SourcesDirectory)/ansible/packagename.txt 'webApp.zip'
-        - task: ArchiveFiles@2
-          displayName: 'Archive ansible folder to: ansible$(Build.BuildId).zip'
+              New-Item $(artifactFolder)/packagename.txt
+              Set-Content $(artifactFolder)/packagename.txt 'webApp.zip'
+        - task: CopyFiles@2
+          displayName: 'Copy source code files to: $(Build.artifactstagingdirectory)'
           inputs:
-            rootFolderOrFile: '$(Build.SourcesDirectory)/ansible'
+            SourceFolder: '$(Build.sourcesdirectory)'
+            Contents: |
+              sql/users.sql
+              ansible/playbook.yml
+            flattenFolders: true
+            TargetFolder: '$(artifactFolder)'
+        - task: ArchiveFiles@2
+          displayName: 'Archive artifact files as: artifact$(Build.BuildId).zip'
+          inputs:
+            rootFolderOrFile: '$(artifactFolder)'
             includeRootFolder: false
             archiveType: 'zip'
-            archiveFile: '$(Build.ArtifactStagingDirectory)/ansible$(Build.BuildId).zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/artifact$(Build.BuildId).zip'
             replaceExistingArchive: true
-        - task: PublishBuildArtifacts@1
-          displayName: 'Publish archived source code'
-          inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)/webApp.zip'
-            ArtifactName: 'drop'
-            publishLocation: 'Container'
         - task: PublishBuildArtifacts@1
           displayName: 'Publish archived ansible folder'
           inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)/ansible$(Build.BuildId).zip'
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)/artifact$(Build.BuildId).zip'
             ArtifactName: 'drop'
             publishLocation: 'Container'
-        - task: PublishBuildArtifacts@1
-          displayName: 'Publish mysql init script'
-          inputs:
-            PathtoPublish: '$(Build.sourcesdirectory)/sql/users.sql'
-            ArtifactName: 'drop'
-            publishLocation: 'Container'
+
   - stage: 'Dev'
     displayName: 'Deploy the web application to dev server'
     dependsOn: Build
