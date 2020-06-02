@@ -105,5 +105,8 @@
       command: >
         mysql --user={{ admin_username }}@{{ mysqlserver_name }} --password={{ admin_password }} {{ mysqldb_name }}
         --host={{ mysqlserver_name }}.mysql.database.azure.com < /tmp/deploy/users.sql
+      register: stuff
+      check_mode: no
+      changed_when: False
       args:
         warn: false
