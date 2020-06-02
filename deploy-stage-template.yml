@@ -36,8 +36,8 @@ jobs:
               sshEndpoint: 'AnsibleVMSSHConn'
               sourceFolder: '$(artifactFolder)'
               contents: |
-                'webApp.zip'
-                'packagename.txt'
+                webApp.zip
+                packagename.txt
               targetFolder: '/tmp/deploy/'
               overwrite: true
           - task: Ansible@0
