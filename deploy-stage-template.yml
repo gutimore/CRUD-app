@@ -60,5 +60,5 @@ jobs:
               SqlUsername: '$(mysqlUsername)@$(mysqlServerName)'
               SqlPassword: '$(mysqlPassword)'
               TaskNameSelector: 'SqlTaskFile'
-              SqlFile: '$(Pipeline.Workspace)/drop/users.sql'
+              SqlFile: '$(artifactFolder)/users.sql'
               IpDetectionMethod: 'AutoDetect'
