@@ -40,7 +40,7 @@ stages:
               New-Item $(artifactFolder)/packagename.txt
               Set-Content $(artifactFolder)/packagename.txt 'webApp.zip'
         - task: CopyFiles@2
-          displayName: 'Copy source code files to: $(Build.artifactstagingdirectory)'
+          displayName: 'Copy sql and ansible files to: $(artifactFolder)'
           inputs:
             SourceFolder: '$(Build.sourcesdirectory)'
             Contents: |
