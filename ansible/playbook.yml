@@ -94,7 +94,7 @@
         body:
           properties:
             startIpAddress: "0.0.0.0"
-            endIpAddress: "255.255.255.255"
+            endIpAddress: "0.0.0.0"
     - name: Create instance of MySQL Database
       azure_rm_mysqldatabase:
         resource_group: "{{ resource_group }}"
